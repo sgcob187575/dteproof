@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,6 +15,9 @@
 		1277D1C8240F8E8D00EC10F8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1277D1C6240F8E8D00EC10F8 /* LaunchScreen.storyboard */; };
 		1277D1D3240F8E8E00EC10F8 /* dteproofTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1277D1D2240F8E8E00EC10F8 /* dteproofTests.swift */; };
 		1277D1DE240F8E8E00EC10F8 /* dteproofUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1277D1DD240F8E8E00EC10F8 /* dteproofUITests.swift */; };
+		1277D1ED240F920500EC10F8 /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 1277D1EC240F920500EC10F8 /* FacebookLogin */; };
+		1277D1EF240F920500EC10F8 /* FacebookShare in Frameworks */ = {isa = PBXBuildFile; productRef = 1277D1EE240F920500EC10F8 /* FacebookShare */; };
+		1277D1F1240F946300EC10F8 /* FacebookLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1277D1F0240F946300EC10F8 /* FacebookLogin.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +52,7 @@
 		1277D1D9240F8E8E00EC10F8 /* dteproofUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = dteproofUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1277D1DD240F8E8E00EC10F8 /* dteproofUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dteproofUITests.swift; sourceTree = "<group>"; };
 		1277D1DF240F8E8E00EC10F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1277D1F0240F946300EC10F8 /* FacebookLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacebookLogin.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +60,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1277D1EF240F920500EC10F8 /* FacebookShare in Frameworks */,
+				1277D1ED240F920500EC10F8 /* FacebookLogin in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				1277D1BB240F8E8C00EC10F8 /* AppDelegate.swift */,
+				1277D1F0240F946300EC10F8 /* FacebookLogin.swift */,
 				1277D1BD240F8E8C00EC10F8 /* SceneDelegate.swift */,
 				1277D1BF240F8E8C00EC10F8 /* ContentView.swift */,
 				1277D1C1240F8E8D00EC10F8 /* Assets.xcassets */,
@@ -152,6 +159,10 @@
 			dependencies = (
 			);
 			name = dteproof;
+			packageProductDependencies = (
+				1277D1EC240F920500EC10F8 /* FacebookLogin */,
+				1277D1EE240F920500EC10F8 /* FacebookShare */,
+			);
 			productName = dteproof;
 			productReference = 1277D1B8240F8E8C00EC10F8 /* dteproof.app */;
 			productType = "com.apple.product-type.application";
@@ -224,6 +235,9 @@
 				Base,
 			);
 			mainGroup = 1277D1AF240F8E8C00EC10F8;
+			packageReferences = (
+				1277D1EB240F920500EC10F8 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
+			);
 			productRefGroup = 1277D1B9240F8E8C00EC10F8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -268,6 +282,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1277D1BC240F8E8C00EC10F8 /* AppDelegate.swift in Sources */,
+				1277D1F1240F946300EC10F8 /* FacebookLogin.swift in Sources */,
 				1277D1BE240F8E8C00EC10F8 /* SceneDelegate.swift in Sources */,
 				1277D1C0240F8E8C00EC10F8 /* ContentView.swift in Sources */,
 			);
@@ -594,6 +609,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1277D1EB240F920500EC10F8 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/facebook-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1277D1EC240F920500EC10F8 /* FacebookLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1277D1EB240F920500EC10F8 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookLogin;
+		};
+		1277D1EE240F920500EC10F8 /* FacebookShare */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1277D1EB240F920500EC10F8 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookShare;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1277D1B0240F8E8C00EC10F8 /* Project object */;
 }
