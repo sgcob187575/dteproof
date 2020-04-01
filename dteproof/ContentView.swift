@@ -30,8 +30,10 @@ func authn(account:String,password:String) {
                 request.setValue(authorization, forHTTPHeaderField: "Authorization")
                 request.httpBody=data
                 URLSession.shared.dataTask(with: request) { (retdata, response , error) in
-                    if let retdata = retdata,let content=String(data: retdata, encoding: .utf8){
-                        print(content)
+                    let decoder=JSONDecoder()
+                    if let retdata = retdata,let content=String(data: retdata, encoding: .utf8),let personResult = try? decoder.decode(Authjason.self, from: retdata){
+                        print(personResult)
+                        
                     }
                     else{
                         print(error)
