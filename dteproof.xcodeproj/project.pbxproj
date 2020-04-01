@@ -18,6 +18,7 @@
 		1277D1ED240F920500EC10F8 /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 1277D1EC240F920500EC10F8 /* FacebookLogin */; };
 		1277D1EF240F920500EC10F8 /* FacebookShare in Frameworks */ = {isa = PBXBuildFile; productRef = 1277D1EE240F920500EC10F8 /* FacebookShare */; };
 		1277D1F1240F946300EC10F8 /* FacebookLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1277D1F0240F946300EC10F8 /* FacebookLogin.swift */; };
+		12CBEAD9243467FC00FC29A0 /* DataStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CBEAD8243467FC00FC29A0 /* DataStructure.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		1277D1DD240F8E8E00EC10F8 /* dteproofUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dteproofUITests.swift; sourceTree = "<group>"; };
 		1277D1DF240F8E8E00EC10F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1277D1F0240F946300EC10F8 /* FacebookLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacebookLogin.swift; sourceTree = "<group>"; };
+		12CBEAD8243467FC00FC29A0 /* DataStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStructure.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 				1277D1F0240F946300EC10F8 /* FacebookLogin.swift */,
 				1277D1BD240F8E8C00EC10F8 /* SceneDelegate.swift */,
 				1277D1BF240F8E8C00EC10F8 /* ContentView.swift */,
+				12CBEAD8243467FC00FC29A0 /* DataStructure.swift */,
 				1277D1C1240F8E8D00EC10F8 /* Assets.xcassets */,
 				1277D1C6240F8E8D00EC10F8 /* LaunchScreen.storyboard */,
 				1277D1C9240F8E8D00EC10F8 /* Info.plist */,
@@ -283,6 +286,7 @@
 			files = (
 				1277D1BC240F8E8C00EC10F8 /* AppDelegate.swift in Sources */,
 				1277D1F1240F946300EC10F8 /* FacebookLogin.swift in Sources */,
+				12CBEAD9243467FC00FC29A0 /* DataStructure.swift in Sources */,
 				1277D1BE240F8E8C00EC10F8 /* SceneDelegate.swift in Sources */,
 				1277D1C0240F8E8C00EC10F8 /* ContentView.swift in Sources */,
 			);
