@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		122A0D53246E3C460056818F /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122A0D52246E3C460056818F /* VideoViewController.swift */; };
 		122A0D55246E5F170056818F /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122A0D54246E5F170056818F /* ProfileView.swift */; };
+		122A0D98246F94780056818F /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122A0D97246F94780056818F /* LogoView.swift */; };
 		12420040245E5E4300FEA28E /* KingfisherSwiftUIStatic in Frameworks */ = {isa = PBXBuildFile; productRef = 1242003F245E5E4300FEA28E /* KingfisherSwiftUIStatic */; };
 		12420042245E5E4300FEA28E /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 12420041245E5E4300FEA28E /* KingfisherSwiftUI */; };
 		12420044245E5E4300FEA28E /* KingfisherSwiftUIDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 12420043245E5E4300FEA28E /* KingfisherSwiftUIDynamic */; };
@@ -35,7 +36,6 @@
 		12420094245E603D00FEA28E /* NextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12420085245E603D00FEA28E /* NextButton.swift */; };
 		12420095245E603D00FEA28E /* UploadfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12420086245E603D00FEA28E /* UploadfileView.swift */; };
 		12420096245E603D00FEA28E /* ImagepickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12420087245E603D00FEA28E /* ImagepickerView.swift */; };
-		12420097245E603D00FEA28E /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12420088245E603D00FEA28E /* LogoView.swift */; };
 		12420098245E603D00FEA28E /* SetProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12420089245E603D00FEA28E /* SetProfileView.swift */; };
 		12420099245E603D00FEA28E /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1242008A245E603D00FEA28E /* MenuView.swift */; };
 		1242009B245E62BF00FEA28E /* EdwardianScriptITC.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1242009A245E62BF00FEA28E /* EdwardianScriptITC.ttf */; };
@@ -91,6 +91,7 @@
 		100914A0E7D3F04B77355A67 /* Pods_dteproof.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_dteproof.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		122A0D52246E3C460056818F /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		122A0D54246E5F170056818F /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		122A0D97246F94780056818F /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LogoView.swift; path = view/LogoView.swift; sourceTree = SOURCE_ROOT; };
 		1242004B245E5F5E00FEA28E /* ColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		1242004C245E5F5E00FEA28E /* NetworkClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkClass.swift; sourceTree = "<group>"; };
 		1242004D245E5F5E00FEA28E /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
@@ -99,23 +100,22 @@
 		12420050245E5F5E00FEA28E /* SentyGoldenBell.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SentyGoldenBell.ttf; sourceTree = "<group>"; };
 		12420051245E5F5E00FEA28E /* LinearGradientExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinearGradientExtension.swift; sourceTree = "<group>"; };
 		12420052245E5F5E00FEA28E /* DataStructure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStructure.swift; sourceTree = "<group>"; };
-		1242007C245E603D00FEA28E /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = viewmodel/ContentView.swift; sourceTree = SOURCE_ROOT; };
-		1242007D245E603D00FEA28E /* MotherView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MotherView.swift; path = viewmodel/MotherView.swift; sourceTree = SOURCE_ROOT; };
-		1242007E245E603D00FEA28E /* RegisterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegisterView.swift; path = viewmodel/RegisterView.swift; sourceTree = SOURCE_ROOT; };
-		1242007F245E603D00FEA28E /* StartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StartView.swift; path = viewmodel/StartView.swift; sourceTree = SOURCE_ROOT; };
-		12420080245E603D00FEA28E /* Forgotpasswordview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Forgotpasswordview.swift; path = viewmodel/Forgotpasswordview.swift; sourceTree = SOURCE_ROOT; };
-		12420081245E603D00FEA28E /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginView.swift; path = viewmodel/LoginView.swift; sourceTree = SOURCE_ROOT; };
-		12420082245E603D00FEA28E /* ChangePasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChangePasswordView.swift; path = viewmodel/ChangePasswordView.swift; sourceTree = SOURCE_ROOT; };
+		1242007C245E603D00FEA28E /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = view/ContentView.swift; sourceTree = SOURCE_ROOT; };
+		1242007D245E603D00FEA28E /* MotherView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MotherView.swift; path = view/MotherView.swift; sourceTree = SOURCE_ROOT; };
+		1242007E245E603D00FEA28E /* RegisterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegisterView.swift; path = view/RegisterView.swift; sourceTree = SOURCE_ROOT; };
+		1242007F245E603D00FEA28E /* StartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StartView.swift; path = view/StartView.swift; sourceTree = SOURCE_ROOT; };
+		12420080245E603D00FEA28E /* Forgotpasswordview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Forgotpasswordview.swift; path = view/Forgotpasswordview.swift; sourceTree = SOURCE_ROOT; };
+		12420081245E603D00FEA28E /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginView.swift; path = view/LoginView.swift; sourceTree = SOURCE_ROOT; };
+		12420082245E603D00FEA28E /* ChangePasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChangePasswordView.swift; path = view/ChangePasswordView.swift; sourceTree = SOURCE_ROOT; };
 		12420083245E603D00FEA28E /* Pributton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pributton.swift; sourceTree = "<group>"; };
-		12420084245E603D00FEA28E /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomeView.swift; path = viewmodel/HomeView.swift; sourceTree = SOURCE_ROOT; };
+		12420084245E603D00FEA28E /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomeView.swift; path = view/HomeView.swift; sourceTree = SOURCE_ROOT; };
 		12420085245E603D00FEA28E /* NextButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NextButton.swift; sourceTree = "<group>"; };
-		12420086245E603D00FEA28E /* UploadfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UploadfileView.swift; path = viewmodel/UploadfileView.swift; sourceTree = SOURCE_ROOT; };
+		12420086245E603D00FEA28E /* UploadfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UploadfileView.swift; path = view/UploadfileView.swift; sourceTree = SOURCE_ROOT; };
 		12420087245E603D00FEA28E /* ImagepickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagepickerView.swift; sourceTree = "<group>"; };
-		12420088245E603D00FEA28E /* LogoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
-		12420089245E603D00FEA28E /* SetProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SetProfileView.swift; path = viewmodel/SetProfileView.swift; sourceTree = SOURCE_ROOT; };
-		1242008A245E603D00FEA28E /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuView.swift; path = viewmodel/MenuView.swift; sourceTree = SOURCE_ROOT; };
+		12420089245E603D00FEA28E /* SetProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SetProfileView.swift; path = view/SetProfileView.swift; sourceTree = SOURCE_ROOT; };
+		1242008A245E603D00FEA28E /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuView.swift; path = view/MenuView.swift; sourceTree = SOURCE_ROOT; };
 		1242009A245E62BF00FEA28E /* EdwardianScriptITC.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EdwardianScriptITC.ttf; sourceTree = "<group>"; };
-		1242009F245EBEA300FEA28E /* UploadImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UploadImageManager.swift; path = view/UploadImageManager.swift; sourceTree = SOURCE_ROOT; };
+		1242009F245EBEA300FEA28E /* UploadImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UploadImageManager.swift; path = viewmodel/UploadImageManager.swift; sourceTree = SOURCE_ROOT; };
 		124200A12460025E00FEA28E /* ImagepickerviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagepickerviewController.swift; sourceTree = "<group>"; };
 		124200A32461433500FEA28E /* PostViewRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewRow.swift; sourceTree = "<group>"; };
 		125D7399246BCCA70063263C /* Locationmanager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locationmanager.swift; sourceTree = "<group>"; };
@@ -176,6 +176,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		122A0D96246F8C8A0056818F /* subview */ = {
+			isa = PBXGroup;
+			children = (
+				122A0D97246F94780056818F /* LogoView.swift */,
+				12420085245E603D00FEA28E /* NextButton.swift */,
+				12420083245E603D00FEA28E /* Pributton.swift */,
+				12420087245E603D00FEA28E /* ImagepickerView.swift */,
+			);
+			path = subview;
+			sourceTree = "<group>";
+		};
 		1242005B245E5F6B00FEA28E /* datamodel */ = {
 			isa = PBXGroup;
 			children = (
@@ -197,12 +208,8 @@
 		1242005C245E5FA400FEA28E /* viewmodel */ = {
 			isa = PBXGroup;
 			children = (
-				1242004E245E5F5E00FEA28E /* SheetdbViewModel.swift */,
 				1242009F245EBEA300FEA28E /* UploadImageManager.swift */,
-				12420087245E603D00FEA28E /* ImagepickerView.swift */,
-				12420088245E603D00FEA28E /* LogoView.swift */,
-				12420085245E603D00FEA28E /* NextButton.swift */,
-				12420083245E603D00FEA28E /* Pributton.swift */,
+				1242004E245E5F5E00FEA28E /* SheetdbViewModel.swift */,
 			);
 			path = viewmodel;
 			sourceTree = "<group>";
@@ -211,18 +218,18 @@
 			isa = PBXGroup;
 			children = (
 				12420082245E603D00FEA28E /* ChangePasswordView.swift */,
-				1242007C245E603D00FEA28E /* ContentView.swift */,
 				12420080245E603D00FEA28E /* Forgotpasswordview.swift */,
 				12420084245E603D00FEA28E /* HomeView.swift */,
-				124200A32461433500FEA28E /* PostViewRow.swift */,
 				122A0D54246E5F170056818F /* ProfileView.swift */,
+				124200A32461433500FEA28E /* PostViewRow.swift */,
 				12420081245E603D00FEA28E /* LoginView.swift */,
 				1242008A245E603D00FEA28E /* MenuView.swift */,
 				1242007D245E603D00FEA28E /* MotherView.swift */,
 				1242007E245E603D00FEA28E /* RegisterView.swift */,
 				12420089245E603D00FEA28E /* SetProfileView.swift */,
-				1242007F245E603D00FEA28E /* StartView.swift */,
+				1242007C245E603D00FEA28E /* ContentView.swift */,
 				12420086245E603D00FEA28E /* UploadfileView.swift */,
+				1242007F245E603D00FEA28E /* StartView.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -230,6 +237,7 @@
 		1277D1AF240F8E8C00EC10F8 = {
 			isa = PBXGroup;
 			children = (
+				122A0D96246F8C8A0056818F /* subview */,
 				1242007B245E5FDC00FEA28E /* view */,
 				1242005C245E5FA400FEA28E /* viewmodel */,
 				1242005B245E5F6B00FEA28E /* datamodel */,
@@ -587,7 +595,6 @@
 				12420095245E603D00FEA28E /* UploadfileView.swift in Sources */,
 				124200A22460025E00FEA28E /* ImagepickerviewController.swift in Sources */,
 				12420098245E603D00FEA28E /* SetProfileView.swift in Sources */,
-				12420097245E603D00FEA28E /* LogoView.swift in Sources */,
 				1242008C245E603D00FEA28E /* MotherView.swift in Sources */,
 				1242008B245E603D00FEA28E /* ContentView.swift in Sources */,
 				12420057245E5F5E00FEA28E /* Multitextfield.swift in Sources */,
@@ -595,6 +602,7 @@
 				1242008F245E603D00FEA28E /* Forgotpasswordview.swift in Sources */,
 				124200A0245EBEA300FEA28E /* UploadImageManager.swift in Sources */,
 				124200A42461433500FEA28E /* PostViewRow.swift in Sources */,
+				122A0D98246F94780056818F /* LogoView.swift in Sources */,
 				1242008D245E603D00FEA28E /* RegisterView.swift in Sources */,
 				12420092245E603D00FEA28E /* Pributton.swift in Sources */,
 				12420059245E5F5E00FEA28E /* LinearGradientExtension.swift in Sources */,

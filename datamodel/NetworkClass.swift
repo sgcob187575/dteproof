@@ -70,7 +70,7 @@ struct UploadVideoResult:Codable {
 }
 class DataManager {
     static let shared=DataManager()
-    let sheetid="oee2k0tq8fmpf"
+    let sheetid="wbnk65hoa1dfl"
     let boundary = "Boundary-\(UUID().uuidString)"
     func getSheetdbPublisher(sql:String)->AnyPublisher<[Sheetdbget],Error>{
         guard  let urlString = "https://sheetdb.io/api/v1/\(sheetid)\(sql)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ,let url=URL(string: urlString) else {
@@ -179,13 +179,7 @@ class DataManager {
         let headers: HTTPHeaders = [
             "Authorization": "Client-ID f79138fb7a32d37",
         ]
-        AF.upload(multipartFormData: { (data) in
-            let imageData = uiImage.jpegData(compressionQuality: 0.9)
-            data.append(imageData!, withName: "image")
-        }, to: "https://api.imgur.com/3/image", headers: headers).responseString { (content) in
-            print(content)
-        }
-
+        
 
         return URLSession.shared.dataTaskPublisher(for: request).map{$0.data}.decode(type: UploadImageResult.self, decoder: decorder).receive(on: DispatchQueue.main).eraseToAnyPublisher()
     }
