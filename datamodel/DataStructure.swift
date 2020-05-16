@@ -9,6 +9,9 @@
 import Foundation
 import SwiftUI
 import Combine
+import Photos
+import BSImagePicker
+import MapKit
 let startword=["您好","這個APP的作者是陳昱豪","用來上傳圖片到imgur","現在這裡打的字是廢話","但是我做完之後","會改成有用的話","送給有意義的人"]
 
 class ViewRouter: ObservableObject {
@@ -152,55 +155,84 @@ struct UploadImageResult: Decodable {
     }
     let data: Data
 }
+struct Sheetdbget:Codable ,Identifiable{
+    var id:String{imageURL[0]}
+    //https://sheetdb.io/api/v1/5tpif3zsl56dh
+    var imageURL:[String]
+    var text:String
+    var group:String
+    var valid:String
+    var date:String
+    var upload:String
+    var uploadimage:String
+    var uploadlogin:String
+    enum CodingKeys: CodingKey {
+        case imageURL
+        case text
+        case group
+        case valid
+        case date
+        case upload
+        case uploadimage
+        case uploadlogin
+    }
+    init(imageURL:[String],text:String,group:String,valid:String,date:String,upload:String,uploadimage:String,uploadlogin:String) {
+        self.imageURL=imageURL
+        self.text=text
+        self.group=group
+        self.valid=valid
+        self.upload=upload
+        self.date=date
+        self.uploadimage=uploadimage
+        self.uploadlogin=uploadlogin
+    }
+
+    init(from decoder: Decoder) throws {
+         
+       
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+         
+        
+        text = try container.decode(String.self, forKey: .text)
+        group = try container.decode(String.self, forKey: .group)
+
+        valid = try container.decode(String.self, forKey: .valid)
+        date = try container.decode(String.self, forKey: .date)
+
+        upload = try container.decode(String.self, forKey: .upload)
+        uploadimage = try container.decode(String.self, forKey: .uploadimage)
+        uploadlogin = try container.decode(String.self, forKey: .uploadlogin)
+
+
+         
+        let imageString = try container.decode(String.self, forKey: .imageURL)
+       if let areaData = imageString.data(using: .utf8), let imageURL = try? JSONDecoder().decode([String].self, from: areaData) {
+            self.imageURL = imageURL
+        } else {
+            self.imageURL = []
+        }
+    }
+
+    
+}
+struct Creat:Decodable{
+    let created:Int
+}
+struct Newrowdata:Encodable{
+    let data:[Sheetdbget]
+}
 class OurImage: Codable, Identifiable {
     // JSON field
     let imageURL: String
     let id = UUID()
     var text:String?
-    // 收到禮物的人，將禮物送給 giftee
     var group:Int
-    // 是否已送出禮物
-    var valid:Bool    // 是否已得到禮物
+    var valid:Bool
     var date:String
     var upload:String
 }
-struct ImagePickerController: UIViewControllerRepresentable {
-    
-    @Binding var selectImage: UIImage?
-    @Binding var showSelectPhoto: Bool
-    
-    func makeCoordinator() -> ImagePickerController.Coordinator {
-        Coordinator(self)
-    }
-        
-    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-        
-        var imagePickerController: ImagePickerController
-        
-        init(_ imagePickerController: ImagePickerController) {
-            self.imagePickerController = imagePickerController
-        }
-        
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            imagePickerController.showSelectPhoto = false
-            imagePickerController.selectImage = info[.originalImage] as? UIImage
-        }
-        
-    }
-    
-    func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePickerController>) -> UIImagePickerController {
-        let controller = UIImagePickerController()
-        controller.sourceType = .photoLibrary
-        controller.delegate = context.coordinator
-        return controller
-        
-    }
-    
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<ImagePickerController>) {
-    }
-    
-    
-}
+
+
 class ImageData: ObservableObject {
     
     @Published var  ourimages = [OurImage]()
@@ -219,5 +251,28 @@ class ImageData: ObservableObject {
     }
     
 }
+extension Data {
+    mutating func appendString(_ string: String) {
+        append(string.data(using: .utf8)!)
+    }
+}
 
+extension Date{
+    func date2String(dateFormat:String = "yyyy-MM-dd HH:mm:ss") -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale.init(identifier: "zh_CN")
+        formatter.dateFormat = dateFormat
+        let date = formatter.string(from: self)
+        return date
+    }
+}
+extension String{
+    func string2Date(dateFormat:String = "yyyy-MM-dd HH:mm:ss") -> Date {
+        let formatter = DateFormatter()
+        formatter.locale = Locale.init(identifier: "zh_CN")
+        formatter.dateFormat = dateFormat
+        let date = formatter.date(from: self)
+        return date!
+    }
+}
 

@@ -36,10 +36,10 @@ struct Forgotpasswordview: View {
                             self.showAlert=true
                             return
                         }
-                        NetworkManager.shared.getID(login: self.account) { (result) in
+                        LogManager.shared.getID(login: self.account) { (result) in
                             switch result{
                                 case .success(let id):
-                                NetworkManager.shared.forgot(userId: id) { (result) in
+                                LogManager.shared.forgot(userId: id) { (result) in
                                     switch result{
                                     case .success(let url):
                                         self.forgoturl=url

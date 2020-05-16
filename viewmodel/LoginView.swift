@@ -90,7 +90,7 @@ struct LoginView: View {
                 self.alerttitle="登入中"
                 self.alertmessage="請稍候"
                 self.saving=true
-                NetworkManager.shared.fblogin { (result) in
+                LogManager.shared.fblogin { (result) in
                     switch result{
                     case .success(let user):
                         DispatchQueue.main.async {
@@ -168,7 +168,7 @@ struct LoginView: View {
                     return
                 }
 
-                NetworkManager.shared.auth(account: self.account, password: self.password) { (result) in
+                LogManager.shared.auth(account: self.account, password: self.password) { (result) in
                     switch result{
                     case .success(let personResult):
                         DispatchQueue.main.async {
@@ -178,7 +178,7 @@ struct LoginView: View {
                                 self.userdata.user.oktatoken=personResult.sessionToken
                                 self.alerttitle="登入成功"
                                 self.alertmessage=""
-                                NetworkManager.shared.getProfile(login:self.userdata.user.oktalogin!){ (result) in
+                                LogManager.shared.getProfile(login:self.userdata.user.oktalogin!){ (result) in
                                     switch result {
                                     case .success(let personResult):
                                         let tempuser=User(profile: personResult.profile, oktatoken: self.userdata.user.oktatoken, oktaid: self.userdata.user.oktaid, fbid: self.userdata.user.fbid)

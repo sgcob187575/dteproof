@@ -40,7 +40,7 @@ struct SetProfileView: View {
                 }){
                     Text("更換大頭貼")
                 }.sheet(isPresented: $showSelectImage) {
-                    ImagePickerController(selectImage: self.$selectImage, showSelectPhoto: self.$showSelectImage)
+                    SingleImagePickerController(selectImage: self.$selectImage, showSelectPhoto: self.$showSelectImage)
                 }
                 profilefield(displayname: self.$displayname, defult: userdata.user.profile!.displayName,text:"名稱：")
                 profilefield(displayname: self.$phone, defult: userdata.user.profile!.phone,text:"手機：")
@@ -54,7 +54,7 @@ struct SetProfileView: View {
                     self.alertstring="儲存中請稍候"
                     if self.selectImage != nil{
                         self.alertstring="照片上傳中"
-                        NetworkManager.shared.uploadImagetoimgue(uiImage: self.selectImage!) { (result) in
+                        DataManager.shared.upImage(uiImage: self.selectImage!) { (result) in
                             switch result{
                             case .success(let imageURL):
                                 self.alertstring="照片上傳成功，再稍等一下下"
@@ -64,7 +64,7 @@ struct SetProfileView: View {
                                 var tempuser=self.userdata.user
                                 tempuser.profile!.displayName=self.displayname == "" ? self.userdata.user.profile!.displayName:self.displayname
                                 tempuser.profile!.imageURL=imageURL
-                                NetworkManager.shared.editProfile(id: self.userdata.user.oktaid!, profile: tempuser.profile!) { (result) in
+                                LogManager.shared.editProfile(id: self.userdata.user.oktaid!, profile: tempuser.profile!) { (result) in
                                     switch result{
                                     case .success(_):
                                         DispatchQueue.main.async {
@@ -89,7 +89,7 @@ struct SetProfileView: View {
                         var tempuser=self.userdata.user
                         tempuser.profile!.displayName=self.displayname == "" ? self.userdata.user.profile!.displayName:self.displayname
                         tempuser.profile!.phone=self.phone == "" ? self.userdata.user.profile!.phone:self.phone
-                        NetworkManager.shared.editProfile(id: self.userdata.user.oktaid!, profile: tempuser.profile!) { (result) in
+                        LogManager.shared.editProfile(id: self.userdata.user.oktaid!, profile: tempuser.profile!) { (result) in
                             switch result{
                             case .success(_):
                                 self.alertstring="儲存成功"

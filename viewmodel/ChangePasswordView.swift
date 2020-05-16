@@ -81,7 +81,7 @@ struct savebutton: View {
                 self.alertmessage="新密碼及確認密碼不一致"
                 return
             }
-            NetworkManager.shared.changePassword(id: self.userdata.user.oktaid!, origin: self.originpass, new: self.newpass) { (result) in
+            LogManager.shared.changePassword(id: self.userdata.user.oktaid!, origin: self.originpass, new: self.newpass) { (result) in
                 switch result{
                 case .success(let state):
                     if state=="Password has been used too recently"{

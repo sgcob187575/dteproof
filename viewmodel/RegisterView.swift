@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import Alamofire
 struct RegisterView: View {
     @State private var email=""
     @State private var displayname=""
@@ -46,7 +45,7 @@ struct RegisterView: View {
                 
                 if step==3{
                     ImagepickerView(selectImage: $selectImage,size: 32, showSelectPhoto: $showSelectPhoto).sheet(isPresented: $showSelectPhoto) {
-                            ImagePickerController(selectImage: self.$selectImage, showSelectPhoto: self.$showSelectPhoto)
+                            SingleImagePickerController(selectImage: self.$selectImage, showSelectPhoto: self.$showSelectPhoto)
                         }
                     
                 }
@@ -62,7 +61,8 @@ struct RegisterView: View {
                 HStack{
                     Spacer()
                     if step>0{
-                        Button(action: {self.step-=1}){
+                        Button(action: {self.showwrong=false
+                            self.step-=1}){
                             Pributton()
                         }
                     }
@@ -244,7 +244,7 @@ struct nextstepbutton: View {
                 self.saving=true
                 self.alerttitle="註冊中"
                 self.alertmessage="請稍候"
-                NetworkManager.shared.regis(reg: Register(profile: OktaProfile(login: self.email, displayName: self.displayname, email: self.email), credentials: Credentials(password: Password(value: self.password),recovery_question: Recovery(question: self.question, answer: self.ans))), regImg: self.selectImage!, completion: { (result) in
+                LogManager.shared.regis(reg: Register(profile: OktaProfile(login: self.email, displayName: self.displayname, email: self.email), credentials: Credentials(password: Password(value: self.password),recovery_question: Recovery(question: self.question, answer: self.ans))), regImg: self.selectImage!, completion: { (result) in
                     switch result{
                     case.success(let profile):
                         self.alerttitle="註冊成功"

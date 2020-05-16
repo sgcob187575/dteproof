@@ -9,10 +9,11 @@
 import Foundation
 import SwiftUI
 import FacebookLogin
-import Alamofire
 import KingfisherSwiftUI
 import SafariServices
-
+import Combine
+import AVFoundation
+import Alamofire
 enum NetworkError: Error {
     case errorPassword
     case invalidUrl
@@ -53,45 +54,204 @@ class Validfield{
         let isvalidatePass = validatePassord.evaluate(with: trimmedString)
         return isvalidatePass
     }
+    func isVideo(url: String) -> Bool {
+        let passRegEx = ".*mp4"
+        let trimmedString = url.trimmingCharacters(in: .whitespaces)
+        let validatePassord = NSPredicate(format:"SELF MATCHES %@", passRegEx)
+        let isvalidatePass = validatePassord.evaluate(with: trimmedString)
+        return isvalidatePass
+    }
+
     
     
 }
-class NetworkManager {
+struct UploadVideoResult:Codable {
+    let success:Bool
+}
+class DataManager {
+    static let shared=DataManager()
+    let sheetid="oee2k0tq8fmpf"
+    let boundary = "Boundary-\(UUID().uuidString)"
+    func getSheetdbPublisher(sql:String)->AnyPublisher<[Sheetdbget],Error>{
+        guard  let urlString = "https://sheetdb.io/api/v1/\(sheetid)\(sql)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ,let url=URL(string: urlString) else {
+            return Fail(error: NetworkError.invalidUrl).eraseToAnyPublisher()
+        }
+        let decorder=JSONDecoder()
+//        URLSession.shared.dataTask(with: url){data,_,_ in
+//            print(String(data: data!, encoding: .utf8))
+//            
+//        }.resume()
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .map{$0.data}.decode(type: [Sheetdbget].self, decoder: decorder).receive(on: DispatchQueue.main).eraseToAnyPublisher()
+    }
+
+    func createMultipartFormData(parameters: [[String: Any]]) -> Data {
+            var postData = Data()
+        
+            for param in parameters {
+                let paramName = param["key"]!
+                postData.appendString("--\(boundary)\r\n")
+                postData.appendString("Content-Disposition:form-data; name=\"\(paramName)\"")
+                            
+                let value = param["value"]
+                if value is String {
+                    let paramValue = param["value"] as! String
+                    postData.appendString("\r\n\r\n\(paramValue)\r\n")
+                } else if value is UIImage {
+                    let uiImage = param["value"] as! UIImage
+                    let imageData = uiImage.jpegData(compressionQuality: 1)!
+                    let fileName = UUID().uuidString
+                    postData.appendString("; filename=\"\(fileName)\"\r\n"
+                        + "Content-Type: \"content-type header\"\r\n\r\n")
+                    postData.append(imageData)
+                    postData.appendString("\r\n")
+                }else if value is AVAsset{
+                    let avasset = param["value"] as! AVAsset
+                    let avurlasset=avasset as? AVURLAsset
+                    let data = NSData(contentsOf: avurlasset!.url)! as Data
+                    let fileName = UUID().uuidString
+                    postData.appendString("; filename=\"\(fileName)\"\r\n"
+                        + "Content-Type: \"content-type header\"\r\n\r\n")
+                    postData.append(data)
+                    postData.appendString("\r\n")
+                    }
+
+                
+                
+            }
+            postData.appendString("--\(boundary)--\r\n")
+
+            
+            return postData
+            
+    }
     
-    static let shared   = NetworkManager()
+    func upVideotoalbumPublisher(avasset:AVAsset )->AnyPublisher<UploadImageResult,Error> {
+        let parameters = [
+            [
+                "key": "video",
+                "value": avasset,
+            ]
+            ]
+        
+        let postData = createMultipartFormData(parameters: parameters)
+        let url = URL(string: "https://api.imgur.com/3/upload")!
+            var request = URLRequest(url: url)
+            request.setValue("Bearer 286d9bf31d2200c23914c19f9d6d0aab0e2e925c", forHTTPHeaderField: "Authorization")
+            request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+            request.httpMethod = "POST"
+            let decorder=JSONDecoder()
+            request.httpBody=postData
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer 286d9bf31d2200c23914c19f9d6d0aab0e2e925c",
+        ]
+        AF.upload(multipartFormData: { (data) in
+            let avurlasset=avasset as? AVURLAsset
+            let videodata = NSData(contentsOf: avurlasset!.url)! as Data
+            data.append(videodata, withName: "video", fileName: UUID().uuidString, mimeType: "video/mp4")
+            
+        }, to: "https://api.imgur.com/3/image", headers: headers).responseString { (content) in
+            print(content)
+        }
+        return URLSession.shared.dataTaskPublisher(for: request).map{$0.data}.decode(type: UploadImageResult.self, decoder: decorder).receive(on: DispatchQueue.main).eraseToAnyPublisher()
+    }
+
+    func upImagetoalbumPublisher(uiImage: UIImage)->AnyPublisher<UploadImageResult,Error> {
+        let parameters = [
+            [
+                "key": "album",
+                "value": "Dr9328E",
+            ],
+            [
+                "key": "image",
+                "value": uiImage,
+            ]
+            ]
+        
+        let postData = createMultipartFormData(parameters: parameters)
+        let url = URL(string: "https://api.imgur.com/3/image")!
+            var request = URLRequest(url: url)
+            request.setValue("Bearer 286d9bf31d2200c23914c19f9d6d0aab0e2e925c", forHTTPHeaderField: "Authorization")
+            request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+            request.httpMethod = "POST"
+            let decorder=JSONDecoder()
+            request.httpBody=postData
+        let headers: HTTPHeaders = [
+            "Authorization": "Client-ID f79138fb7a32d37",
+        ]
+        AF.upload(multipartFormData: { (data) in
+            let imageData = uiImage.jpegData(compressionQuality: 0.9)
+            data.append(imageData!, withName: "image")
+        }, to: "https://api.imgur.com/3/image", headers: headers).responseString { (content) in
+            print(content)
+        }
+
+
+        return URLSession.shared.dataTaskPublisher(for: request).map{$0.data}.decode(type: UploadImageResult.self, decoder: decorder).receive(on: DispatchQueue.main).eraseToAnyPublisher()
+    }
+    func upImage(uiImage: UIImage, completion: @escaping (Result<String,NetworkError>) -> Void) {
+        let parameters = [
+            [
+                "key": "image",
+                "value": uiImage,
+            ]
+            ]
+        
+        let postData = createMultipartFormData(parameters: parameters)
+        let url = URL(string: "https://api.imgur.com/3/image")!
+            var request = URLRequest(url: url)
+            request.setValue("Bearer 286d9bf31d2200c23914c19f9d6d0aab0e2e925c", forHTTPHeaderField: "Authorization")
+            request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+            request.httpMethod = "POST"
+            
+            URLSession.shared.uploadTask(with: request, from: postData) { data, response, error in
+                guard let data = data else {
+                    completion(.failure(.invalidData))
+                    return
+                }
+                do {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(UploadImageResult.self, from: data)
+                    completion(.success(result.data.link))
+                } catch {
+                    completion(.failure(.datatypeError))
+                }
+                
+            }.resume()
+            
+    }
+    
+    func postSheetdbPublisher(newrow:Sheetdbget)->AnyPublisher<Int,Error>{
+        guard  let urlString = "https://sheetdb.io/api/v1/\(sheetid)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ,let url=URL(string: urlString) else {
+            return Fail(error: NetworkError.invalidUrl).eraseToAnyPublisher()
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let newrowdata=Newrowdata(data: [newrow])
+        guard  let data = try? JSONEncoder().encode(newrowdata) else{
+            return Fail(error: NetworkError.datatypeError).eraseToAnyPublisher()
+        }
+        request.httpBody=data
+        let decorder=JSONDecoder()
+       
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{$0.data}.decode(type: [String:Int].self, decoder: decorder).map{$0.first!.value}.receive(on: DispatchQueue.main).eraseToAnyPublisher()
+    }
+    
+
+
+}
+
+class LogManager {
+    static let shared   = LogManager()
     private let baseURL = "https://dev-261926.okta.com/api/v1/"
     private let api_token = "001_jfExIBUFpjSq6m5SCXKDGN4XfPg7Vvj_PXipxd"
     private let content_type="application/json"
     private let accept="application/json"
     private init() {}
-    func uploadImagetoAlbum(uiimage:UIImage,completion:@escaping(Result<String,NetworkError>)->Void){
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer 286d9bf31d2200c23914c19f9d6d0aab0e2e925c","Content-Type":"application/json"
-        ]
-        AF.upload(multipartFormData: { (data) in
-            let imageData = uiimage.jpegData(compressionQuality: 0.9)
-            let albumid="B52Qztm"
-            if let upalid = try? JSONEncoder().encode(albumid){
-                data.append(upalid, withName: "album")
-                /*這行*/         print(try? String(data: data.encode(), encoding: .utf8))
-            }
-            
-            data.append(imageData!, withName: "image")
-            
-            
-        }, to: "https://api.imgur.com/3/image", headers: headers).responseDecodable(of: UploadImageResult.self, queue: .main, decoder: JSONDecoder()) { (response) in
-            switch response.result {
-            case .success(let result):
-                completion(.success(result.data.link))
-            case .failure(let error):
-                print(error)
-            }
-            
-        }
-    }
     func auth(account: String, password:String, completion: @escaping (Result<Authjason,NetworkError>) -> Void) {
         let endpoint = baseURL + "authn"
-        
         guard let url = URL(string: endpoint) else {
             completion(.failure(.invalidUrl))
             return
@@ -131,10 +291,10 @@ class NetworkManager {
                 }
             }
         }
-        
         task.resume()
-        
     }
+    
+    
     func getID(login:String,completion: @escaping (Result<String,NetworkError>) -> Void) {
         let endpoint = baseURL + "users/\(login)"
         
@@ -304,26 +464,9 @@ class NetworkManager {
         
         task.resume()
     }
-    func uploadImagetoimgue(uiImage:UIImage,completion:@escaping((Result<String,NetworkError>)->Void)){
-        let headers: HTTPHeaders = [
-            "Authorization": "Client-ID f79138fb7a32d37",
-        ]
-        AF.upload(multipartFormData: { (data) in
-            let imageData = uiImage.jpegData(compressionQuality: 0.9)
-            data.append(imageData!, withName: "image")
-            
-        }, to: "https://api.imgur.com/3/upload", headers: headers).responseDecodable(of: UploadImageResult.self, queue: .main, decoder: JSONDecoder()) { (response) in
-            switch response.result {
-            case .success(let result):
-                completion(.success(result.data.link))
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
     func regis(reg:Register,regImg:UIImage,completion:@escaping((Result<GetProfile,NetworkError>)->Void)){
         var regiprofile=reg
-        self.uploadImagetoimgue(uiImage: regImg, completion: { (response) in
+        DataManager.shared.upImage(uiImage: regImg, completion: { (response) in
             switch response {
             case .success(let result):
                 regiprofile.profile?.imageURL=result

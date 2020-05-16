@@ -1,0 +1,20 @@
+PODS:
+  - AKVideoImageView (1.1.2)
+  - BSImagePicker (3.1.4)
+
+DEPENDENCIES:
+  - AKVideoImageView (~> 1.1)
+  - BSImagePicker (~> 3.1)
+
+SPEC REPOS:
+  trunk:
+    - AKVideoImageView
+    - BSImagePicker
+
+SPEC CHECKSUMS:
+  AKVideoImageView: ec5ed83c024f9b8149b042072177cd1e8c1aaf57
+  BSImagePicker: ec10342450eef9eb7d8bd040ab081bd1c3db6791
+
+PODFILE CHECKSUM: 94a431f454d01a35f6b9484111f8f0066b975980
+
+COCOAPODS: 1.8.4
