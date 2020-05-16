@@ -211,16 +211,5 @@ struct LoginView: View {
             }
         }
     }
-    struct LogoView: View {
-        var x:CGFloat
-        var y:CGFloat
-        var body: some View {
-            ZStack{
-                Image("logo").resizable().scaledToFit().frame(height:100).transformEffect(.init(scaleX: -1, y: 1)).blur(radius: 2).shadow(radius: 7).rotationEffect(Angle.init(degrees: 180)).offset(x:x,y:y).opacity(0.5)
-                Image("logo").resizable().scaledToFit().frame(height:100).shadow(radius: 7)
-
-            }
-        }
-    }
 
 }
