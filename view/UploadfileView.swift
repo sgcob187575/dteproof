@@ -64,6 +64,7 @@ struct UploadfileView: View {
 
                 }
                 self.uploadimage.selectimages.removeAll()
+                self.uploadimage.selectvedio.removeAll()
                 self.uploadimage.imagesURL.removeAll()
                 self.uploadimage.imagepublishers.removeAll()
                 self.imagetext=""

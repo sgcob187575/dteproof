@@ -8,6 +8,7 @@
 import SwiftUI
 import KingfisherSwiftUI
 import AKVideoImageView
+import AVKit
 struct PostViewRow: View {
     var postdata:Sheetdbget
     @State private var showtext=false
@@ -37,21 +38,25 @@ struct PostViewRow: View {
                     HStack{
                         ForEach(postdata.imageURL.filter({
                             !Validfield.shared.isVideo(url:$0)   }), id: \.self){(imageurl) in
-                            KFImage(URL(string:imageurl)).resizable().scaledToFit().frame(width:400,height: 300)
+                                KFImage(URL(string:imageurl)).resizable().scaledToFit().frame(width:400,height: 300).onTapGesture {
+                                    self.showtext.toggle()
+                                }
                             
                         }
-
                         ForEach(postdata.imageURL.filter({
-                        Validfield.shared.isVideo(url:$0)   }), id: \.self){(imageurl) in
-                            VideoviewController(urlstring: imageurl).frame(width:400,height: 300)                        }
+                                               Validfield.shared.isVideo(url:$0)   }), id: \.self){(imageurl) in
+                                                   
+                                                   VideoView(urlstring: imageurl,player: AVQueuePlayer(url: URL(string: imageurl)!)).frame(width:400,height: 300)
+                                                   
+                                               }
+
+
+                       
                     }.padding(.bottom,20)
                         
                     }
-                }.onTapGesture {
-                    withAnimation(.easeInOut) {                             self.showtext.toggle()
-
-                    }
                 }
+                
             }
 
             if self.showtext{
@@ -67,6 +72,7 @@ struct PostViewRow: View {
 
                     }
                 }
+                
         }
         }
     }

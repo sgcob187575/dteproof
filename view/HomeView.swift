@@ -42,7 +42,7 @@ struct HomeView: View {
                     }.onAppear {
                         print("fetch data")
                     
-                    //self.sheetdbViewModel.fetchdata()
+                    self.sheetdbViewModel.fetchdata()
                 }
                 if(showMenu){
                     MenuView(showSetProfile: self.$showSetProfile,showChangePassword:

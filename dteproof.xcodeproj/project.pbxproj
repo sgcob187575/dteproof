@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		122A0D53246E3C460056818F /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122A0D52246E3C460056818F /* VideoViewController.swift */; };
 		122A0D55246E5F170056818F /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122A0D54246E5F170056818F /* ProfileView.swift */; };
 		122A0D98246F94780056818F /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122A0D97246F94780056818F /* LogoView.swift */; };
+		122A0D9C246FCD800056818F /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122A0D9B246FCD800056818F /* VideoView.swift */; };
 		12420040245E5E4300FEA28E /* KingfisherSwiftUIStatic in Frameworks */ = {isa = PBXBuildFile; productRef = 1242003F245E5E4300FEA28E /* KingfisherSwiftUIStatic */; };
 		12420042245E5E4300FEA28E /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 12420041245E5E4300FEA28E /* KingfisherSwiftUI */; };
 		12420044245E5E4300FEA28E /* KingfisherSwiftUIDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 12420043245E5E4300FEA28E /* KingfisherSwiftUIDynamic */; };
@@ -89,9 +89,9 @@
 
 /* Begin PBXFileReference section */
 		100914A0E7D3F04B77355A67 /* Pods_dteproof.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_dteproof.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		122A0D52246E3C460056818F /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		122A0D54246E5F170056818F /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		122A0D97246F94780056818F /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LogoView.swift; path = view/LogoView.swift; sourceTree = SOURCE_ROOT; };
+		122A0D9B246FCD800056818F /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		1242004B245E5F5E00FEA28E /* ColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		1242004C245E5F5E00FEA28E /* NetworkClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkClass.swift; sourceTree = "<group>"; };
 		1242004D245E5F5E00FEA28E /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
@@ -183,6 +183,7 @@
 				12420085245E603D00FEA28E /* NextButton.swift */,
 				12420083245E603D00FEA28E /* Pributton.swift */,
 				12420087245E603D00FEA28E /* ImagepickerView.swift */,
+				122A0D9B246FCD800056818F /* VideoView.swift */,
 			);
 			path = subview;
 			sourceTree = "<group>";
@@ -195,7 +196,6 @@
 				1242004B245E5F5E00FEA28E /* ColorExtension.swift */,
 				12420052245E5F5E00FEA28E /* DataStructure.swift */,
 				124200A12460025E00FEA28E /* ImagepickerviewController.swift */,
-				122A0D52246E3C460056818F /* VideoViewController.swift */,
 				12420051245E5F5E00FEA28E /* LinearGradientExtension.swift */,
 				1242004F245E5F5E00FEA28E /* Multitextfield.swift */,
 				1242004C245E5F5E00FEA28E /* NetworkClass.swift */,
@@ -585,9 +585,9 @@
 				12420090245E603D00FEA28E /* LoginView.swift in Sources */,
 				12420096245E603D00FEA28E /* ImagepickerView.swift in Sources */,
 				1242005A245E5F5E00FEA28E /* DataStructure.swift in Sources */,
+				122A0D9C246FCD800056818F /* VideoView.swift in Sources */,
 				12420055245E5F5E00FEA28E /* UIColorExtension.swift in Sources */,
 				1242008E245E603D00FEA28E /* StartView.swift in Sources */,
-				122A0D53246E3C460056818F /* VideoViewController.swift in Sources */,
 				12420094245E603D00FEA28E /* NextButton.swift in Sources */,
 				12420091245E603D00FEA28E /* ChangePasswordView.swift in Sources */,
 				1277D1BC240F8E8C00EC10F8 /* AppDelegate.swift in Sources */,
