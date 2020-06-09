@@ -10,6 +10,7 @@ import SwiftUI
 
 struct MotherView: View {
     @EnvironmentObject var viewRouter: ViewRouter
+    @Environment(\.managedObjectContext) var managedObjectContext
     @State private var userdata=Userdata()
 
     var body: some View {
@@ -18,7 +19,7 @@ struct MotherView: View {
                 StartView().environmentObject(viewRouter)
             }
             else if viewRouter.currentPage=="logged"{
-                ContentView().environmentObject(userdata).environmentObject(viewRouter)
+                ContentView().environmentObject(userdata).environmentObject(viewRouter).environment(\.managedObjectContext, managedObjectContext)
             } else if viewRouter.currentPage=="unlogged"{
                 LoginView().environmentObject(userdata).environmentObject(viewRouter)
                 

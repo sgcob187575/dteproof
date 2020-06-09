@@ -14,6 +14,8 @@ import SafariServices
 import Combine
 import AVFoundation
 import Alamofire
+import CoreLocation
+
 enum NetworkError: Error {
     case errorPassword
     case invalidUrl
@@ -70,8 +72,43 @@ struct UploadVideoResult:Codable {
 }
 class DataManager {
     static let shared=DataManager()
-    let sheetid="wbnk65hoa1dfl"
+    let addpartnerid="2a5rnm0vpmrx5"
+    let sheetid = "wbnk65hoa1dfl" //"oee2k0tq8fmpf"
     let boundary = "Boundary-\(UUID().uuidString)"
+    func creatnewaddcode(login:String,addcode:String){
+        guard  let urlString = "https://sheetdb.io/api/v1/\(addpartnerid)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ,let url=URL(string: urlString) else {
+            return         }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let newrowdata=Newaddrowdata(data: [Newaddrowdata.Addrowdata(login: login, addcode: addcode)])
+        guard  let data = try? JSONEncoder().encode(newrowdata) else{
+            return         }
+        request.httpBody=data
+        URLSession.shared.dataTask(with: request){data,_,_ in
+            print(String(data: data!, encoding: .utf8) ?? "error")
+        
+        }.resume()
+
+        
+    }
+    func refreshaddcode(login:String,addcode:String){
+        guard  let urlString = "https://sheetdb.io/api/v1/\(addpartnerid)/login/\(login)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ,let url=URL(string: urlString) else {
+            return         }
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let newrowdata=Newaddrowdata(data: [Newaddrowdata.Addrowdata(login: login, addcode: addcode)])
+        guard  let data = try? JSONEncoder().encode(newrowdata) else{
+            return         }
+        request.httpBody=data
+        URLSession.shared.dataTask(with: request){data,_,_ in
+            print(String(data: data!, encoding: .utf8) ?? "error")
+        
+        }.resume()
+    }
+
+    
     func getSheetdbPublisher(sql:String)->AnyPublisher<[Sheetdbget],Error>{
         guard  let urlString = "https://sheetdb.io/api/v1/\(sheetid)\(sql)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ,let url=URL(string: urlString) else {
             return Fail(error: NetworkError.invalidUrl).eraseToAnyPublisher()
@@ -155,12 +192,37 @@ class DataManager {
         }
         return URLSession.shared.dataTaskPublisher(for: request).map{$0.data}.decode(type: UploadImageResult.self, decoder: decorder).receive(on: DispatchQueue.main).eraseToAnyPublisher()
     }
+    struct Locationrow:Codable {
+        struct rowdata:Codable {
+            let x:CLLocationDegrees
+            let y:CLLocationDegrees
+
+        }
+        let data:rowdata
+        
+    }
+    func setlocation(location:CLLocation){
+        guard  let urlString = "https://sheetdb.io/api/v1/0ek4or5ayfudb".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ,let url=URL(string: urlString) else {
+                   return
+            
+        }
+               var request = URLRequest(url: url)
+               request.httpMethod = "POST"
+               request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let newrowdata=Locationrow(data: Locationrow.rowdata(x: location.coordinate.longitude, y: location.coordinate.latitude))
+               guard  let data = try? JSONEncoder().encode(newrowdata) else{
+                   return
+               }
+               request.httpBody=data
+        URLSession.shared.dataTask(with: request){data,_,_ in
+        }.resume()
+    }
 
     func upImagetoalbumPublisher(uiImage: UIImage)->AnyPublisher<UploadImageResult,Error> {
         let parameters = [
             [
                 "key": "album",
-                "value": "Dr9328E",
+                "value": "B52Qztm",//B52Qztm
             ],
             [
                 "key": "image",
@@ -176,10 +238,6 @@ class DataManager {
             request.httpMethod = "POST"
             let decorder=JSONDecoder()
             request.httpBody=postData
-        let headers: HTTPHeaders = [
-            "Authorization": "Client-ID f79138fb7a32d37",
-        ]
-        
 
         return URLSession.shared.dataTaskPublisher(for: request).map{$0.data}.decode(type: UploadImageResult.self, decoder: decorder).receive(on: DispatchQueue.main).eraseToAnyPublisher()
     }
@@ -477,7 +535,10 @@ class LogManager {
                     request.setValue(self.content_type, forHTTPHeaderField: "Content-Type")
                     request.setValue(self.accept, forHTTPHeaderField: "Accept")
                     request.httpBody=data
-                    let task = URLSession.shared.dataTask(with: request) { data, response, error in                        if let _ = error {
+                    DataManager.shared.creatnewaddcode(login: reg.profile!.login, addcode: reg.profile!.addcode)
+                    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                        print(String(data: data!, encoding: .utf8) ?? "")
+                        if let _ = error {
                         print("__error")
                         
                         completion(.failure(.requestFailed))
@@ -515,7 +576,7 @@ class LogManager {
     }
     func fblogin(completion: @escaping (Result<User,NetworkError>)-> Void){
         var user=User()
-        var  reg=Register(profile: OktaProfile(login: "", displayName: "", email: ""), credentials: Credentials(password: Password(value: "1234"),recovery_question: Recovery(question: "", answer: "")))
+        var  reg=Register(profile: OktaProfile(login: "", displayName: "", email: "",addcode: ""), credentials: Credentials(password: Password(value: "1234"),recovery_question: Recovery(question: "", answer: "")))
         let manager = LoginManager()
         manager.logIn(permissions: [.publicProfile, .email]) { (result) in
             if case LoginResult.success(granted: _, declined: _, token: _) = result {
@@ -535,6 +596,9 @@ class LogManager {
                         reg.profile!.email=result["email"]!
                         reg.profile!.displayName=result["name"]!
                         reg.credentials.password.value=result["id"]!+"PaSS"
+                        let pswdChars = Array("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
+                        let rndPswd = String((0..<7).map{ _ in pswdChars[Int(arc4random_uniform(UInt32(pswdChars.count)))]})
+                        reg.profile?.addcode=rndPswd
                         self.auth(account: reg.profile!.email, password: reg.credentials.password.value) { (result) in
                             switch result{
                             case .success(let personResult):

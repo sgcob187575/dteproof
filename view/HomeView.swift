@@ -11,42 +11,56 @@ import FacebookLogin
 import KingfisherSwiftUI
 struct HomeView: View {
     @ObservedObject var sheetdbViewModel = SheetdbViewModel()
+    @Environment(\.managedObjectContext) var managedObjectContext
     @EnvironmentObject var viewRouter: ViewRouter
     @State private var showSetProfile = false
     @State private var showChangepass = false
+    @State private var showCountdown = false
+    @State private var showSearch = false
     @State private var test = false
     @State private var barcolor=UIColor.systemBackground
     @State private var selectImage: UIImage?
     @EnvironmentObject var userdata:Userdata
     @State private var showMenu=false
+    @ObservedObject var locationManager = LocationManager.shared
+    @State private var searchoffset:CGFloat=0
+
     var body: some View {
         NavigationView{
             ZStack(alignment: .bottom){
+                NavigationLink(destination: SetProfileView(showSetprofile: self.$showSetProfile,barcolor:self.$barcolor).environmentObject(self.userdata), isActive: self.$showSetProfile){
+                    Text("")
+                }
+                NavigationLink(destination: ChangePasswordView(showChangePassword: self.$showChangepass,barcolor:self.$barcolor).environmentObject(self.userdata), isActive: self.$showChangepass){
+                    Text("")
+                }
+                NavigationLink(destination: CountDownView(), isActive: self.$showCountdown){
+                    Text("")
+                }
+                
                 VStack {
-                    
-                    List(sheetdbViewModel.data.reversed()) { (data) in
-                        PostViewRow(postdata:data).background(            LinearGradient(gradient: .init(colors: [Color.init(red: 147/255, green: 210/255, blue: 203/255),Color.white,Color.init(red: 244/255, green: 187/255, blue: 212/255)]), startPoint: .top, endPoint: .bottom).onAppear { UITableView.appearance().separatorStyle = .none } .onDisappear { UITableView.appearance().separatorStyle = .singleLine }
-)
-                    
-                    
-                    
+                    List{
+                        ForEach(sheetdbViewModel.appeardata.reversed(),id:\.id){ (data) in
+                            PostViewRow(postdata:data,searchoffset: self.$searchoffset).offset(x:-15)
+                            
+                            
+                        }.listRowBackground(Color.init(red: 202/255, green: 230/255, blue: 242/255)).onAppear {
+                            self.locationManager.getLocation()
+                            UITableView.appearance().separatorStyle = .none } .onDisappear { UITableView.appearance().separatorStyle = .singleLine }
+                        
+                        
                     }
-                    NavigationLink(destination: SetProfileView(showSetprofile: self.$showSetProfile,barcolor:self.$barcolor).environmentObject(self.userdata), isActive: self.$showSetProfile){
-                        Text("")
-                    }
-                    NavigationLink(destination: ChangePasswordView(showChangePassword: self.$showChangepass,barcolor:self.$barcolor).environmentObject(self.userdata), isActive: self.$showChangepass){
-                        Text("")
-                    }
-
-                                       
-                    }.onAppear {
-                        print("fetch data")
-                    
-                    self.sheetdbViewModel.fetchdata()
+                }.offset(y:-50).onAppear {
+                    print("fetch data")
+                    let sql="/search_or?uploadlogin[]=\(self.userdata.user.profile!.login)&uploadlogin[]=\(self.userdata.user.profile!.partner ?? "")"
+                    self.sheetdbViewModel.fetchdata(sql:sql)
                 }
                 if(showMenu){
                     MenuView(showSetProfile: self.$showSetProfile,showChangePassword:
-                        self.$showChangepass,showMenu: self.$showMenu).offset(x:0,y:0)
+                        self.$showChangepass,showMenu: self.$showMenu, showcountdown: self.$showCountdown,showSearch: self.$showSearch).offset(x:0,y:0)
+                }
+                if(showSearch){
+                    searchBarView(sheetdbViewModel: sheetdbViewModel,showSearch: $showSearch,searchoffset: $searchoffset)
                 }
                 
             }.navigationBarItems( leading: HStack{
@@ -68,6 +82,7 @@ struct HomeView: View {
                 Button(action: {
                     withAnimation{
                         self.showMenu.toggle()
+                        self.showSearch=false
                     }
                 }){Image(systemName: "list.dash").font(.system(size: 23)).foregroundColor(.primary).frame(width:60)}
                 
@@ -75,11 +90,12 @@ struct HomeView: View {
                 .frame(height: 1.0, alignment: .bottom)
                 .foregroundColor(Color.gray).offset(y:30))
             )
+            
         } .background(NavigationConfigurator { nc in
             nc.navigationBar.barTintColor = self.barcolor
             nc.navigationBar.tintColor=UIColor.label
             nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.label]
-        })           .navigationViewStyle(StackNavigationViewStyle())
+        })
         
     }
     
@@ -88,5 +104,67 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView().environmentObject(Userdata())
+    }
+}
+struct searchBarView:View {
+    var sheetdbViewModel: SheetdbViewModel
+    @Binding var showSearch:Bool
+    @State var query=""
+    @State var mode=0
+    @State private var date=Date()
+    @Binding var searchoffset:CGFloat
+
+
+    let types=["內容","日期"]
+    
+    var body: some View{
+        ZStack {
+            Color.white.frame(height:250)
+            VStack {
+                Picker(selection: $mode, label: Text("")) {
+                    ForEach(0..<types.count) { (index) in
+                        Text(self.types[index])
+                    }
+                }.colorMultiply( .gray).pickerStyle(SegmentedPickerStyle()).padding()
+                if mode == 1{
+                    HStack {
+                        DatePicker("", selection: Binding(get: {self.date}, set: {
+                            self.date=$0
+                            self.sheetdbViewModel.searchdatawithdate(self.date)
+                        }), in: ClosedRange<Date>(uncheckedBounds: (lower: DateComponents(calendar: Calendar.current, year: 2014, month: 10, day: 31 ).date!, upper: Date())),displayedComponents: .date).colorMultiply( .black)
+                            .labelsHidden()
+                            .frame( height: 150.0)
+                    
+                        
+                    }
+                    
+                }
+                if mode == 0{
+                    SearchBar(text: Binding(get: {
+                                                return self.query}, set: {(text) in
+                        self.query=text
+                        if self.query == ""{
+                            self.sheetdbViewModel.cancelsearch()
+                        }
+                        else{
+                            self.sheetdbViewModel.searchdatawithtext(self.query)
+                        }
+                    }),searchoffset:$searchoffset).offset(y:searchoffset)
+                }
+                
+            }
+            Image(systemName: "xmark.circle.fill").font(.system(size: 30)).foregroundColor(.black).onTapGesture {
+                self.showSearch=false
+                self.searchoffset=0
+
+                if self.mode == 1{
+                if self.date.date2String(dateFormat: "yyyy-MM") == Date().date2String(dateFormat: "yyyy-MM"){
+                    self.sheetdbViewModel.cancelsearch()
+                }
+                }
+
+            }.offset(x:UIScreen.main.bounds.width/2-30,y:-105)
+            
+        }
     }
 }

@@ -13,20 +13,18 @@ struct ProfileView: View {
     var postlogin:String
     @State private var profile:OktaProfile?
     @State private var getsuccess=false
-    @State private var post=[Sheetdbget]()
     @State private var cancel:AnyCancellable?
     var body: some View {
         VStack{
             if getsuccess{
                 HStack{
                     KFImage(URL(string: profile!.imageURL!)!).resizable().scaledToFit().frame(width:100).clipShape(Circle()).padding(10)
-                    
+                    VStack{
                     Text(profile!.displayName)
+                        Text(profile!.intro == nil ? "" : profile!.intro!).padding()
+                    }
                 }
-                if post.count != 0{
-                PostListView(post: post)
-                }
-                
+                WallCollectionView(login: postlogin)
             }
         }.onAppear() {
             LogManager.shared.getProfile(login: self.postlogin) { (result) in
@@ -39,11 +37,7 @@ struct ProfileView: View {
                     print(error)
                 }
             }
-            self.cancel=DataManager.shared.getSheetdbPublisher(sql: "/search?uploadlogin=\(self.postlogin)").sink(receiveCompletion: { (result) in
-                print(result)
-            }) { (result) in
-                self.post=result
-            }
+            
         }
     }
 }

@@ -26,7 +26,6 @@ struct TextView: UIViewRepresentable {
         myTextView.isEditable = true
         myTextView.isUserInteractionEnabled = true
         myTextView.backgroundColor = UIColor.clear
-
         return myTextView
     }
 
@@ -37,7 +36,6 @@ struct TextView: UIViewRepresentable {
     class Coordinator : NSObject, UITextViewDelegate {
 
         var parent: TextView
-
         init(_ uiTextView: TextView) {
             self.parent = uiTextView
         }
@@ -46,7 +44,9 @@ struct TextView: UIViewRepresentable {
             return true
         }
         func textViewDidBeginEditing(_ textView: UITextView) {
-            self.parent.text=" "
+            if self.parent.text == ""{
+            self.parent.text+=" "
+            }
         }
 
         func textViewDidChange(_ textView: UITextView) {

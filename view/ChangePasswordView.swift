@@ -32,10 +32,8 @@ struct ChangePasswordView: View {
                     cpasswordfield(text: "確認密碼", password: self.$confirmpass)
 
                 
-            }.navigationBarTitle("變更密碼", displayMode: .inline)
-                .navigationBarItems(trailing: savebutton(showAlert: self.$showAlert, originpass: self.$originpass, newpass: self.$newpass, confirmpass: self.$confirmpass, showChangePassword: self.$showChangePassword, barcolor: self.$barcolor, alertmessage: self.$alertmessage, alerttitle: self.$alerttitle, saving: self.$saving, changesuccess: self.$changesuccess)
-                    
-            )
+            }
+            
             if(saving){ZStack{
                 Spacer()}.edgesIgnoringSafeArea(.all).background(Color.gray.opacity(0.2)
                 )

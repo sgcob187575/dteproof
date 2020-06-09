@@ -17,6 +17,7 @@ import KingfisherSwiftUI
 struct ContentView: View {
     @EnvironmentObject var userdata:Userdata
     @EnvironmentObject var viewRouter: ViewRouter
+    @Environment(\.managedObjectContext) var managedObjectContext
     @State private var select=1
 
     var body: some View{

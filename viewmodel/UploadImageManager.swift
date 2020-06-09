@@ -55,7 +55,7 @@ class UploadImage:ObservableObject{
                 self.imagesURL.append(pub[i].data.link)
                 
             }
-            let uprow=Sheetdbget(imageURL: self.imagesURL, text: newrow.text, group: newrow.group, valid: newrow.valid, date: newrow.date, upload: newrow.upload,uploadimage: newrow.uploadimage, uploadlogin: newrow.uploadlogin)
+            let uprow=Sheetdbget(imageURL: self.imagesURL, text: newrow.text, group: newrow.group, valid: newrow.valid, date: newrow.date, upload: newrow.upload,uploadimage: newrow.uploadimage, uploadlogin: newrow.uploadlogin,locationname: newrow.locationname)
             self.uploadsheet(row: uprow)
             
         }

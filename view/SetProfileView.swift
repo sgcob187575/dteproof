@@ -12,6 +12,8 @@ struct SetProfileView: View {
     @EnvironmentObject var userdata:Userdata
     @State private var displayname=""
     @State private var phone=""
+    @State private var intro=""
+    @State private var addcode=""
     @State private var selectImage:UIImage?
     @State private var showSelectImage=false
     @State private var showAlert=false
@@ -42,8 +44,30 @@ struct SetProfileView: View {
                 }.sheet(isPresented: $showSelectImage) {
                     SingleImagePickerController(selectImage: self.$selectImage, showSelectPhoto: self.$showSelectImage)
                 }
+                HStack{
+                Text("配對密碼：\(addcode)").padding().foregroundColor(.black).background(Rectangle()
+                .frame(width:300,height: 1.0, alignment: .bottomTrailing)
+                    .foregroundColor(Color.gray).offset(y:18)).onAppear(){
+                        self.addcode=self.userdata.user.profile!.addcode
+                }
+                    Image(systemName: "gobackward").onTapGesture {
+                        let pswdChars = Array("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
+                        let rndPswd = String((0..<7).map{ _ in pswdChars[Int(arc4random_uniform(UInt32(pswdChars.count)))]})
+
+                        self.addcode=rndPswd
+                    }
+                }
+
+
                 profilefield(displayname: self.$displayname, defult: userdata.user.profile!.displayName,text:"名稱：")
                 profilefield(displayname: self.$phone, defult: userdata.user.profile!.phone,text:"手機：")
+                HStack{
+                    Text("自介：").padding().padding(.trailing,-20)
+                    MultilineTextField(userdata.user.profile!.intro == nil ? "介紹自己" :userdata.user.profile!.intro!, text: $intro
+                        ).frame(width:UIScreen.main.bounds.width-150,height:90).border(Color.gray,width: 1)
+                    Spacer()
+
+                }.frame(width:UIScreen.main.bounds.width)
                 Spacer()
                 
             }.navigationBarTitle("編輯個人資料", displayMode: .inline)
@@ -62,11 +86,15 @@ struct SetProfileView: View {
                                 
                                 
                                 var tempuser=self.userdata.user
+                                tempuser.profile!.addcode=self.addcode
                                 tempuser.profile!.displayName=self.displayname == "" ? self.userdata.user.profile!.displayName:self.displayname
+                                tempuser.profile!.phone=self.phone == "" ? self.userdata.user.profile!.phone:self.phone
                                 tempuser.profile!.imageURL=imageURL
+                                tempuser.profile!.intro=self.intro == "" ? self.userdata.user.profile!.intro:self.intro
                                 LogManager.shared.editProfile(id: self.userdata.user.oktaid!, profile: tempuser.profile!) { (result) in
                                     switch result{
                                     case .success(_):
+                                        DataManager.shared.refreshaddcode(login: self.userdata.user.profile!.login, addcode: self.addcode)
                                         DispatchQueue.main.async {
                                             self.userdata.user=tempuser
                                             self.alertstring="儲存成功"
@@ -87,13 +115,18 @@ struct SetProfileView: View {
                     }
                     else{
                         var tempuser=self.userdata.user
+                        tempuser.profile!.addcode=self.addcode
+
                         tempuser.profile!.displayName=self.displayname == "" ? self.userdata.user.profile!.displayName:self.displayname
                         tempuser.profile!.phone=self.phone == "" ? self.userdata.user.profile!.phone:self.phone
+                        tempuser.profile!.intro=self.intro == "" ? self.userdata.user.profile!.intro:self.intro
                         LogManager.shared.editProfile(id: self.userdata.user.oktaid!, profile: tempuser.profile!) { (result) in
                             switch result{
                             case .success(_):
                                 self.alertstring="儲存成功"
                                 self.showAlert=true
+                                DataManager.shared.refreshaddcode(login: self.userdata.user.profile!.login, addcode: self.addcode)
+
                                 DispatchQueue.main.async {
                                     self.userdata.user=tempuser
                                     
@@ -146,7 +179,7 @@ struct profilefield: View {
             Text(text).padding().foregroundColor(.black)
             ZStack(alignment: .leading){
             if(displayname == ""){
-                Text(defult!).padding().foregroundColor(.lairGray)
+                Text(defult == nil ? "設定..." : defult!).padding().foregroundColor(.lairGray)
             }
                 TextField("", text: $displayname).foregroundColor(.black)
             }

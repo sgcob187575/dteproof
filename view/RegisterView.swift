@@ -50,7 +50,7 @@ struct RegisterView: View {
                     
                 }
                 if step==4{
-                    recoveryfield(text: "設定一個問題", recovery: $question)
+                    recoveryfield(text: "設定密碼回覆問題", recovery: $question)
                     recoveryfield(text: "答案", recovery: $ans)
 
                     
@@ -239,12 +239,20 @@ struct nextstepbutton: View {
                     self.wrongString="請設定答案"
                     return
                 }
+                guard self.ans.count >= 4  else{
+                    self.showwrong=true
+                    self.wrongString="答案必須超過四的字"
+                    return
+                }
+
 
                 self.showAlert=true
                 self.saving=true
                 self.alerttitle="註冊中"
                 self.alertmessage="請稍候"
-                LogManager.shared.regis(reg: Register(profile: OktaProfile(login: self.email, displayName: self.displayname, email: self.email), credentials: Credentials(password: Password(value: self.password),recovery_question: Recovery(question: self.question, answer: self.ans))), regImg: self.selectImage!, completion: { (result) in
+                let pswdChars = Array("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
+                let rndPswd = String((0..<7).map{ _ in pswdChars[Int(arc4random_uniform(UInt32(pswdChars.count)))]})
+                LogManager.shared.regis(reg: Register(profile: OktaProfile(login: self.email, displayName: self.displayname, email: self.email,addcode: rndPswd), credentials: Credentials(password: Password(value: self.password),recovery_question: Recovery(question: self.question, answer: self.ans))), regImg: self.selectImage!, completion: { (result) in
                     switch result{
                     case.success(let profile):
                         self.alerttitle="註冊成功"

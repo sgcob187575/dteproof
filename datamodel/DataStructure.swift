@@ -12,7 +12,8 @@ import Combine
 import Photos
 import BSImagePicker
 import MapKit
-let startword=["您好","這個APP的作者是陳昱豪","用來上傳圖片到imgur","現在這裡打的字是廢話","但是我做完之後","會改成有用的話","送給有意義的人"]
+
+let startword=["s","a"]
 
 class ViewRouter: ObservableObject {
     
@@ -83,6 +84,8 @@ struct OktaProfile:Codable {
     var imageURL:String?
     var partner:String?
     var phone:String?
+    var intro:String?
+    var addcode:String
 
 }
 struct User:Codable {
@@ -166,6 +169,7 @@ struct Sheetdbget:Codable ,Identifiable{
     var upload:String
     var uploadimage:String
     var uploadlogin:String
+    var locationname:String?
     enum CodingKeys: CodingKey {
         case imageURL
         case text
@@ -175,8 +179,9 @@ struct Sheetdbget:Codable ,Identifiable{
         case upload
         case uploadimage
         case uploadlogin
+        case locationname
     }
-    init(imageURL:[String],text:String,group:String,valid:String,date:String,upload:String,uploadimage:String,uploadlogin:String) {
+    init(imageURL:[String],text:String,group:String,valid:String,date:String,upload:String,uploadimage:String,uploadlogin:String,locationname:String?) {
         self.imageURL=imageURL
         self.text=text
         self.group=group
@@ -185,6 +190,7 @@ struct Sheetdbget:Codable ,Identifiable{
         self.date=date
         self.uploadimage=uploadimage
         self.uploadlogin=uploadlogin
+        self.locationname=locationname
     }
 
     init(from decoder: Decoder) throws {
@@ -202,6 +208,7 @@ struct Sheetdbget:Codable ,Identifiable{
         upload = try container.decode(String.self, forKey: .upload)
         uploadimage = try container.decode(String.self, forKey: .uploadimage)
         uploadlogin = try container.decode(String.self, forKey: .uploadlogin)
+        locationname = try container.decode(String.self, forKey: .locationname)
 
 
          
@@ -214,6 +221,13 @@ struct Sheetdbget:Codable ,Identifiable{
     }
 
     
+}
+struct Newaddrowdata:Codable {
+    struct Addrowdata:Codable {
+        let login:String
+        let addcode:String
+    }
+    let data:[Addrowdata]
 }
 struct Creat:Decodable{
     let created:Int
@@ -230,6 +244,7 @@ class OurImage: Codable, Identifiable {
     var valid:Bool
     var date:String
     var upload:String
+    
 }
 
 
@@ -258,7 +273,7 @@ extension Data {
 }
 
 extension Date{
-    func date2String(dateFormat:String = "yyyy-MM-dd HH:mm:ss") -> String {
+    func date2String(dateFormat:String = "yyyy-MM-dd") -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale.init(identifier: "zh_CN")
         formatter.dateFormat = dateFormat
@@ -267,7 +282,7 @@ extension Date{
     }
 }
 extension String{
-    func string2Date(dateFormat:String = "yyyy-MM-dd HH:mm:ss") -> Date {
+    func string2Date(dateFormat:String = "yyyy-MM-dd") -> Date {
         let formatter = DateFormatter()
         formatter.locale = Locale.init(identifier: "zh_CN")
         formatter.dateFormat = dateFormat
@@ -275,4 +290,15 @@ extension String{
         return date!
     }
 }
+extension Date {
+    func daysBetweenDate(toDate: Date) -> Int {
+        let components = Calendar.current.dateComponents([.day], from: self, to: toDate)
+        return components.day ?? 0
+    }
+}
 
+extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}

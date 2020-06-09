@@ -9,7 +9,7 @@
 import SwiftUI
 import Photos
 import Combine
-
+import MapKit
 
 struct UploadfileView: View {
     @Binding var selecttab:Int
@@ -21,9 +21,13 @@ struct UploadfileView: View {
     @State private var imageasset=[PHAsset]()
     @ObservedObject var uploadimage=UploadImage()
     @State private var imagetext=""
+    @State private var query=""
+    @State private var locationname="未選取"
     @State var can:AnyCancellable?
     @State var imagesURL=[String]()
     @State var imagedate=Date()
+    @State var searchoffset:CGFloat=0
+    @ObservedObject var locationManager = LocationManager.shared
     var body: some View {
         NavigationView{
             ZStack(alignment: .bottom){
@@ -53,6 +57,39 @@ struct UploadfileView: View {
                         Spacer()
                                         }
                         DatePicker("日期", selection: $imagedate, displayedComponents: .date)
+                    HStack{
+                        Text("位置:").padding()
+                        Spacer()
+                        Text(locationname).padding()
+                        Spacer()
+                    }
+                    HStack{
+
+                        SearchBar(text: Binding(get: {self.query}, set: { (query) in
+                            self.query=query
+                            self.locationManager.setquery(query: query)
+                        }), searchoffset: $searchoffset)
+                    }.onAppear(){
+                        self.locationManager.getLocation()
+                        
+                    }
+                    if !locationManager.mapItems.isEmpty{
+                    ScrollView(.horizontal){
+                        HStack{
+                            ForEach(self.locationManager.mapItems.indices, id: \.self) { (index)  in
+                                VStack(spacing:5){
+                                    Text(self.locationManager.mapItems[index].placemark.description.formatmapitem()[0]).font(.system(size: 20)).foregroundColor(.white).fixedSize()
+                                    Text(self.locationManager.mapItems[index].placemark.description.formatmapitem()[1]).font(.system(size: 10)).foregroundColor(.white)
+                                    
+                                }.padding().background(Color.gray).cornerRadius(10).onTapGesture {
+                                    self.locationname=self.locationManager.mapItems[index].name!
+                                }
+                        }
+                        }
+                        
+                    }
+                    }
+                    
 
                 }.sheet(isPresented: $showSelectPhoto) {
                     imagePickerviewController().environmentObject(self.uploadimage)                }
@@ -68,6 +105,7 @@ struct UploadfileView: View {
                 self.uploadimage.imagesURL.removeAll()
                 self.uploadimage.imagepublishers.removeAll()
                 self.imagetext=""
+                self.locationname="未選取"
                 self.uploadimage.showError.toggle()
             })){
                 Alert(title: Text(self.uploadimage.errortext))
@@ -80,7 +118,11 @@ struct UploadfileView: View {
                 Spacer()
                 
                 Button(action: {
-                    self.uploadimage.upload(newrow: Sheetdbget(imageURL: [String](), text: self.imagetext, group: UUID().uuidString, valid: "true", date: self.imagedate.date2String(dateFormat: "yyyy-MM-dd"), upload: self.userdata.user.profile!.displayName,uploadimage: self.userdata.user.profile!.imageURL!, uploadlogin: self.userdata.user.profile!.login))
+                    var templocation:String?=nil
+                    if self.locationname != "未選取"{
+                        templocation=self.locationname
+                    }
+                    self.uploadimage.upload(newrow: Sheetdbget(imageURL: [String](), text: self.imagetext, group: UUID().uuidString, valid: "true", date: self.imagedate.date2String(dateFormat: "yyyy-MM-dd"), upload: self.userdata.user.profile!.displayName,uploadimage: self.userdata.user.profile!.imageURL!, uploadlogin: self.userdata.user.profile!.login,locationname: templocation))
                     print(self.userdata.user.profile!.imageURL!)
                 
                    
@@ -100,6 +142,7 @@ struct UploadfileView: View {
         })           .navigationViewStyle(StackNavigationViewStyle())
         
     }
+
     struct multiicon:View {
         var body: some View{
             ZStack{
@@ -112,5 +155,12 @@ struct UploadfileView: View {
 struct UploadfileView_Previews: PreviewProvider {
     static var previews: some View {
         UploadfileView(selecttab: .constant(2))
+    }
+}
+extension String{
+    func formatmapitem()->[String]{
+        var retstring=[String]()
+        retstring = self.components(separatedBy: ",")
+        return retstring
     }
 }
