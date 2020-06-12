@@ -72,16 +72,36 @@ struct UploadVideoResult:Codable {
 }
 class DataManager {
     static let shared=DataManager()
-    let addpartnerid="2a5rnm0vpmrx5"
-    let sheetid = "wbnk65hoa1dfl" //"oee2k0tq8fmpf"
+    let addpartnerid="dfbbaebeffn3y"
+    let sheetid = "5tpif3zsl56dh" //"oee2k0tq8fmpf"
     let boundary = "Boundary-\(UUID().uuidString)"
-    func creatnewaddcode(login:String,addcode:String){
+    func getaddcode(login:String,completion: @escaping (Result<[Newaddrowdata.Addrowdata],NetworkError>)-> Void){
+        guard  let urlString = "https://sheetdb.io/api/v1/\(addpartnerid)/search?login=\(login)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ,let url=URL(string: urlString) else {
+            return         }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        URLSession.shared.dataTask(with: request){data,_,_ in
+            do{
+                let getdata = try JSONDecoder().decode([Newaddrowdata.Addrowdata].self, from: data!)
+                completion(.success(getdata))
+            }
+            catch{
+                completion(.failure(.datatypeError))
+            }
+
+        }.resume()
+
+        
+    }
+    func creatnewaddcode(login:String,addcode:String,id:String){
         guard  let urlString = "https://sheetdb.io/api/v1/\(addpartnerid)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ,let url=URL(string: urlString) else {
             return         }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        let newrowdata=Newaddrowdata(data: [Newaddrowdata.Addrowdata(login: login, addcode: addcode)])
+        let newrowdata=Newaddrowdata(data: [Newaddrowdata.Addrowdata(login: login, addcode: addcode,id:id)])
         guard  let data = try? JSONEncoder().encode(newrowdata) else{
             return         }
         request.httpBody=data
@@ -92,13 +112,13 @@ class DataManager {
 
         
     }
-    func refreshaddcode(login:String,addcode:String){
+    func refreshaddcode(login:String,addcode:String,id:String){
         guard  let urlString = "https://sheetdb.io/api/v1/\(addpartnerid)/login/\(login)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ,let url=URL(string: urlString) else {
             return         }
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        let newrowdata=Newaddrowdata(data: [Newaddrowdata.Addrowdata(login: login, addcode: addcode)])
+        let newrowdata=Newaddrowdata(data: [Newaddrowdata.Addrowdata(login: login, addcode: addcode,id:id)])
         guard  let data = try? JSONEncoder().encode(newrowdata) else{
             return         }
         request.httpBody=data
@@ -107,6 +127,25 @@ class DataManager {
         
         }.resume()
     }
+    func readed(group:String,newrow:Sheetdbget){
+        
+        guard  let urlString = "https://sheetdb.io/api/v1/\(sheetid)/group/\(group)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ,let url=URL(string: urlString) else {
+            return         }
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        var temprow=newrow
+        temprow.read="TRUE"
+        let newrowdata=Newrowdata(data: [temprow])
+        guard  let data = try? JSONEncoder().encode(newrowdata) else{
+            return         }
+        request.httpBody=data
+        URLSession.shared.dataTask(with: request){data,_,_ in
+            print(String(data: data!, encoding: .utf8) ?? "error")
+        
+        }.resume()
+    }
+
 
     
     func getSheetdbPublisher(sql:String)->AnyPublisher<[Sheetdbget],Error>{
@@ -222,7 +261,7 @@ class DataManager {
         let parameters = [
             [
                 "key": "album",
-                "value": "B52Qztm",//B52Qztm
+                "value": "Dr9328E",//B52Qztm
             ],
             [
                 "key": "image",
@@ -470,7 +509,10 @@ class LogManager {
             do {
                 let decoder = JSONDecoder()
                 let personResult = try decoder.decode(GetProfile.self, from: data)
-                completion(.success(personResult))
+                DispatchQueue.main.async {
+                    completion(.success(personResult))
+
+                }
             } catch {
                 completion(.failure(.datatypeError))
             }
@@ -535,7 +577,6 @@ class LogManager {
                     request.setValue(self.content_type, forHTTPHeaderField: "Content-Type")
                     request.setValue(self.accept, forHTTPHeaderField: "Accept")
                     request.httpBody=data
-                    DataManager.shared.creatnewaddcode(login: reg.profile!.login, addcode: reg.profile!.addcode)
                     let task = URLSession.shared.dataTask(with: request) { data, response, error in
                         print(String(data: data!, encoding: .utf8) ?? "")
                         if let _ = error {
@@ -553,6 +594,8 @@ class LogManager {
                         do {
                             let decoder = JSONDecoder()
                             let personResult = try decoder.decode(GetProfile.self, from: data)
+                            DataManager.shared.creatnewaddcode(login: reg.profile!.login, addcode: reg.profile!.addcode,id:personResult.id)
+
                             print(personResult)
                             completion(.success(personResult))
                         } catch {

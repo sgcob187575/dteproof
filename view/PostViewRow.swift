@@ -17,6 +17,7 @@ class test:Identifiable,ObservableObject{
 }
 struct PostViewRow: View {
     var postdata:Sheetdbget
+    @EnvironmentObject var userdata:Userdata
     @State var test1=test()
     @State private var showtext=false
     @State var imageindex=0
@@ -40,7 +41,7 @@ struct PostViewRow: View {
                     KFImage(URL(string: postdata.uploadimage)).resizable().scaledToFit().frame(width:50).clipShape(Circle()).padding(10)
                     ZStack(alignment:.leading){
                     Text(postdata.upload).foregroundColor(.black)
-                        Text(postdata.locationname!).font(.system(size: 15)).foregroundColor(.blue).offset(y:17)
+                        Text(postdata.locationname!).font(.system(size: 15)).foregroundColor(.blue).offset(y:17).frame(height:16)
 
                     }
                     Spacer()
@@ -69,9 +70,14 @@ struct PostViewRow: View {
                         
 
                     }
+                }.onAppear(){
+                    if self.userdata.user.profile!.login != self.postdata.uploadlogin && self.postdata.read != "TRUE"{
+                    DataManager.shared.readed(group: self.postdata.group, newrow: self.postdata)
+                    }
                 }
-            Text(postdata.text).foregroundColor(.black).padding(.init(top: 25, leading: 50, bottom: 25, trailing: 50)).background(ZStack{
+                Text(postdata.read=="FALSE" ?  postdata.text : postdata.text+"\n❤️").foregroundColor(.black).padding(.init(top: 25, leading: 50, bottom: 25, trailing: 50)).background(ZStack{
                 LinearGradient(gradient: .init(colors: [Color.init(red: 147/255, green: 210/255, blue: 203/255),Color.white,Color.init(red: 244/255, green: 187/255, blue: 212/255)]), startPoint: .top, endPoint: .bottom).cornerRadius(30).scaleEffect(x: 0.9, y: 0.9)
+                
                 Image("對話框").resizable()}).onTapGesture {
                     withAnimation(.easeInOut) {
                         UIApplication.shared.endEditing()
@@ -89,7 +95,7 @@ struct PostViewRow: View {
 
 struct PostViewRow_Previews: PreviewProvider {
     static var previews: some View {
-        PostViewRow(postdata: Sheetdbget(imageURL: ["https://i.imgur.com/vtBEfQy.jpg"], text: "hello,iamssssssssssssssssssssssssssssssssssssssssssssssss", group: "a", valid: "a", date: "20200520", upload: "小豪",uploadimage: "https://i.imgur.com/BQWTAOT.jpg",uploadlogin: "l",locationname: nil),searchoffset: Binding<CGFloat>.constant(0))
+        PostViewRow(postdata: Sheetdbget(imageURL: ["https://i.imgur.com/vtBEfQy.jpg"], text: "hello,iamssssssssssssssssssssssssssssssssssssssssssssssss", group: "a", read: "a", date: "20200520", upload: "小豪",uploadimage: "https://i.imgur.com/BQWTAOT.jpg",uploadlogin: "l",locationname: nil),searchoffset: Binding<CGFloat>.constant(0))
     }
 }
 

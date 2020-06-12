@@ -62,6 +62,7 @@
 		1277D1DE240F8E8E00EC10F8 /* dteproofUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1277D1DD240F8E8E00EC10F8 /* dteproofUITests.swift */; };
 		128F8F65247E420C0080CD06 /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 128F8F63247E420C0080CD06 /* CoreDataModel.xcdatamodeld */; };
 		128F8F67247F67570080CD06 /* CountDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128F8F66247F67570080CD06 /* CountDownView.swift */; };
+		12AE6BD72490B75400349207 /* AddPartnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AE6BD62490B75400349207 /* AddPartnerView.swift */; };
 		BC96E4496E91FA385D66AFA3 /* Pods_dteproofTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71B543FB2560FCA834DCCF41 /* Pods_dteproofTests.framework */; };
 		CF299E2713FCED3C38FF6B6A /* Pods_dteproof.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 100914A0E7D3F04B77355A67 /* Pods_dteproof.framework */; };
 		EC1268A8D5A409DE71A5A8D9 /* Pods_dteproof_dteproofUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72E1CDA67D031C9608659BFC /* Pods_dteproof_dteproofUITests.framework */; };
@@ -154,6 +155,7 @@
 		1277D1DF240F8E8E00EC10F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		128F8F64247E420C0080CD06 /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
 		128F8F66247F67570080CD06 /* CountDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDownView.swift; sourceTree = SOURCE_ROOT; };
+		12AE6BD62490B75400349207 /* AddPartnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPartnerView.swift; sourceTree = "<group>"; };
 		27E69E9558138CEEB411BFAA /* Pods-dteproof.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dteproof.release.xcconfig"; path = "Target Support Files/Pods-dteproof/Pods-dteproof.release.xcconfig"; sourceTree = "<group>"; };
 		71B543FB2560FCA834DCCF41 /* Pods_dteproofTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_dteproofTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		72E1CDA67D031C9608659BFC /* Pods_dteproof_dteproofUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_dteproof_dteproofUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -247,6 +249,7 @@
 				12420082245E603D00FEA28E /* ChangePasswordView.swift */,
 				12420080245E603D00FEA28E /* Forgotpasswordview.swift */,
 				12420084245E603D00FEA28E /* HomeView.swift */,
+				12AE6BD62490B75400349207 /* AddPartnerView.swift */,
 				122A0D54246E5F170056818F /* ProfileView.swift */,
 				124200A32461433500FEA28E /* PostViewRow.swift */,
 				12420081245E603D00FEA28E /* LoginView.swift */,
@@ -643,6 +646,7 @@
 				124200A22460025E00FEA28E /* ImagepickerviewController.swift in Sources */,
 				12420098245E603D00FEA28E /* SetProfileView.swift in Sources */,
 				122449FC2475253D002FB2D7 /* PhotoCollectionView.swift in Sources */,
+				12AE6BD72490B75400349207 /* AddPartnerView.swift in Sources */,
 				1242008C245E603D00FEA28E /* MotherView.swift in Sources */,
 				1242008B245E603D00FEA28E /* ContentView.swift in Sources */,
 				12420057245E5F5E00FEA28E /* Multitextfield.swift in Sources */,

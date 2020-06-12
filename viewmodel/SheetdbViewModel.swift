@@ -12,7 +12,6 @@ class SheetdbViewModel: ObservableObject {
     @Published var data = [Sheetdbget]()
     @Published var appeardata = [Sheetdbget]()
     var cancellable: AnyCancellable?
-    
     func fetchdata(sql:String) {
         
        

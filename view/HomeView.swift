@@ -22,9 +22,11 @@ struct HomeView: View {
     @State private var selectImage: UIImage?
     @EnvironmentObject var userdata:Userdata
     @State private var showMenu=false
+    @State private var loading=""
     @ObservedObject var locationManager = LocationManager.shared
     @State private var searchoffset:CGFloat=0
-
+    @State private var canRefresh=true
+    
     var body: some View {
         NavigationView{
             ZStack(alignment: .bottom){
@@ -37,10 +39,45 @@ struct HomeView: View {
                 NavigationLink(destination: CountDownView(), isActive: self.$showCountdown){
                     Text("")
                 }
-                
+                Text("Loading").offset(y:-UIScreen.main.bounds.height+60)
                 VStack {
+                    
                     List{
-                        ForEach(sheetdbViewModel.appeardata.reversed(),id:\.id){ (data) in
+                        GeometryReader  { (g:GeometryProxy) -> Text in
+                            let frame=g.frame(in: CoordinateSpace.global)
+                            let sql="/search_or?uploadlogin[]=\(self.userdata.user.profile!.login)&uploadlogin[]=\(self.userdata.user.profile!.partner ?? "")"
+                            
+                                if frame.origin.y>150{
+                                    DispatchQueue.main.async {
+                                        self.loading="Loading"
+
+                                    }
+
+                                    if self.canRefresh{
+
+                                    print("fetchagain")
+                                    
+                                    DispatchQueue.main.async {
+                                        self.canRefresh=false
+                                        self.sheetdbViewModel.cancellable=nil
+                                        self.sheetdbViewModel.fetchdata(sql:sql)
+                                        
+                                    }
+                                    
+                                }
+                                return Text(self.loading)
+                                
+                            }
+                            else{
+                                DispatchQueue.main.async {
+                                    self.loading=""
+
+                                }
+                                return Text(self.loading)
+                            }
+                        }.frame(height: self.loading=="" ? 0 : 30).offset(y:self.loading=="" ? 0:-50)
+                        
+                        ForEach(sheetdbViewModel.appeardata.sorted(by: { return $0.date>$1.date                        }),id:\.id){ (data) in
                             PostViewRow(postdata:data,searchoffset: self.$searchoffset).offset(x:-15)
                             
                             
@@ -50,7 +87,7 @@ struct HomeView: View {
                         
                         
                     }
-                }.offset(y:-50).onAppear {
+                }.offset(y:-70).onAppear {
                     print("fetch data")
                     let sql="/search_or?uploadlogin[]=\(self.userdata.user.profile!.login)&uploadlogin[]=\(self.userdata.user.profile!.partner ?? "")"
                     self.sheetdbViewModel.fetchdata(sql:sql)
@@ -113,8 +150,8 @@ struct searchBarView:View {
     @State var mode=0
     @State private var date=Date()
     @Binding var searchoffset:CGFloat
-
-
+    
+    
     let types=["內容","日期"]
     
     var body: some View{
@@ -130,25 +167,30 @@ struct searchBarView:View {
                     HStack {
                         DatePicker("", selection: Binding(get: {self.date}, set: {
                             self.date=$0
+                            if self.date.date2String(dateFormat: "yyyy-MM") == Date().date2String(dateFormat: "yyyy-MM"){
+                                self.sheetdbViewModel.cancelsearch()
+                            }
+                            else{
                             self.sheetdbViewModel.searchdatawithdate(self.date)
+                            }
                         }), in: ClosedRange<Date>(uncheckedBounds: (lower: DateComponents(calendar: Calendar.current, year: 2014, month: 10, day: 31 ).date!, upper: Date())),displayedComponents: .date).colorMultiply( .black)
                             .labelsHidden()
                             .frame( height: 150.0)
-                    
+                        
                         
                     }
                     
                 }
                 if mode == 0{
                     SearchBar(text: Binding(get: {
-                                                return self.query}, set: {(text) in
-                        self.query=text
-                        if self.query == ""{
-                            self.sheetdbViewModel.cancelsearch()
-                        }
-                        else{
-                            self.sheetdbViewModel.searchdatawithtext(self.query)
-                        }
+                        return self.query}, set: {(text) in
+                            self.query=text
+                            if self.query == ""{
+                                self.sheetdbViewModel.cancelsearch()
+                            }
+                            else{
+                                self.sheetdbViewModel.searchdatawithtext(self.query)
+                            }
                     }),searchoffset:$searchoffset).offset(y:searchoffset)
                 }
                 
@@ -156,13 +198,7 @@ struct searchBarView:View {
             Image(systemName: "xmark.circle.fill").font(.system(size: 30)).foregroundColor(.black).onTapGesture {
                 self.showSearch=false
                 self.searchoffset=0
-
-                if self.mode == 1{
-                if self.date.date2String(dateFormat: "yyyy-MM") == Date().date2String(dateFormat: "yyyy-MM"){
-                    self.sheetdbViewModel.cancelsearch()
-                }
-                }
-
+                
             }.offset(x:UIScreen.main.bounds.width/2-30,y:-105)
             
         }

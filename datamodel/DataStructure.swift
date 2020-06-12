@@ -164,7 +164,7 @@ struct Sheetdbget:Codable ,Identifiable{
     var imageURL:[String]
     var text:String
     var group:String
-    var valid:String
+    var read:String
     var date:String
     var upload:String
     var uploadimage:String
@@ -174,18 +174,18 @@ struct Sheetdbget:Codable ,Identifiable{
         case imageURL
         case text
         case group
-        case valid
+        case read
         case date
         case upload
         case uploadimage
         case uploadlogin
         case locationname
     }
-    init(imageURL:[String],text:String,group:String,valid:String,date:String,upload:String,uploadimage:String,uploadlogin:String,locationname:String?) {
+    init(imageURL:[String],text:String,group:String,read:String,date:String,upload:String,uploadimage:String,uploadlogin:String,locationname:String?) {
         self.imageURL=imageURL
         self.text=text
         self.group=group
-        self.valid=valid
+        self.read=read
         self.upload=upload
         self.date=date
         self.uploadimage=uploadimage
@@ -202,13 +202,14 @@ struct Sheetdbget:Codable ,Identifiable{
         text = try container.decode(String.self, forKey: .text)
         group = try container.decode(String.self, forKey: .group)
 
-        valid = try container.decode(String.self, forKey: .valid)
+        read = try container.decode(String.self, forKey: .read)
         date = try container.decode(String.self, forKey: .date)
 
         upload = try container.decode(String.self, forKey: .upload)
         uploadimage = try container.decode(String.self, forKey: .uploadimage)
         uploadlogin = try container.decode(String.self, forKey: .uploadlogin)
         locationname = try container.decode(String.self, forKey: .locationname)
+
 
 
          
@@ -226,6 +227,7 @@ struct Newaddrowdata:Codable {
     struct Addrowdata:Codable {
         let login:String
         let addcode:String
+        let id:String
     }
     let data:[Addrowdata]
 }

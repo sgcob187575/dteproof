@@ -23,7 +23,7 @@ struct Forgotpasswordview: View {
             LinearGradient(gradient: .init(colors: [Color.init(red: 147/255, green: 210/255, blue: 203/255),Color.white,Color.init(red: 244/255, green: 187/255, blue: 212/255)]), startPoint: .top, endPoint: .bottom)
             VStack{
                 LogoView(x:-174,y:20).scaledToFit().frame(height:80).padding().offset(y:-30)
-                accountfield(account: $account)
+                accountfield(account: $account,defult: "帳號...")
                 HStack {
                                     Text("返回").foregroundColor(.white).font(.system(size: 25)).padding(.bottom,10).padding(.top,10).frame(width:100).background(Color.init(red: 254/255, green: 175/255, blue: 128/255)).cornerRadius(30)
                                         .onTapGesture {
@@ -78,11 +78,12 @@ struct Forgotpasswordview_Previews: PreviewProvider {
 }
 struct accountfield:View{
     @Binding var account:String
+    var defult:String
     @EnvironmentObject var userdata:Userdata
     var body: some View{
         ZStack(alignment: .leading){
             if(account==""){
-                Text("帳號..").padding().foregroundColor(.lairGray)
+                Text(defult).padding().foregroundColor(.lairGray)
             }
         TextField("", text: $account).accentColor(Color.init(.black)).foregroundColor(.gray).keyboardType(.emailAddress).padding().frame(width:400).overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: 1)).autocapitalization(.none).onAppear{
         if self.userdata.user.profile?.email != nil{

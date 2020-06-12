@@ -98,6 +98,6 @@ struct smallcircle: View {
 }
 struct Photoindex_Previews: PreviewProvider {
     static var previews: some View {
-        Photoindex(postdata:Sheetdbget(imageURL: [""], text: "", group: "", valid: "", date: "", upload: "", uploadimage: "", uploadlogin: "", locationname: ""), currentindex: .constant(0))
+        Photoindex(postdata:Sheetdbget(imageURL: [""], text: "", group: "", read: "", date: "", upload: "", uploadimage: "", uploadlogin: "", locationname: ""), currentindex: .constant(0))
     }
 }

@@ -118,11 +118,16 @@ struct UploadfileView: View {
                 Spacer()
                 
                 Button(action: {
+                    guard self.uploadimage.selectimages.count>0 else{
+                        self.uploadimage.errortext="請選擇照片"
+                        self.uploadimage.showError.toggle()
+                        return
+                    }
                     var templocation:String?=nil
                     if self.locationname != "未選取"{
                         templocation=self.locationname
                     }
-                    self.uploadimage.upload(newrow: Sheetdbget(imageURL: [String](), text: self.imagetext, group: UUID().uuidString, valid: "true", date: self.imagedate.date2String(dateFormat: "yyyy-MM-dd"), upload: self.userdata.user.profile!.displayName,uploadimage: self.userdata.user.profile!.imageURL!, uploadlogin: self.userdata.user.profile!.login,locationname: templocation))
+                    self.uploadimage.upload(newrow: Sheetdbget(imageURL: [String](), text: self.imagetext, group: UUID().uuidString, read: "false", date: self.imagedate.date2String(dateFormat: "yyyy-MM-dd"), upload: self.userdata.user.profile!.displayName,uploadimage: self.userdata.user.profile!.imageURL!, uploadlogin: self.userdata.user.profile!.login,locationname: templocation))
                     print(self.userdata.user.profile!.imageURL!)
                 
                    
