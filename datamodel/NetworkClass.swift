@@ -73,7 +73,6 @@ struct UploadVideoResult:Codable {
 class DataManager {
     static let shared=DataManager()
     let addpartnerid="dfbbaebeffn3y"
-    let sheetid = "5tpif3zsl56dh" //"oee2k0tq8fmpf"
     let boundary = "Boundary-\(UUID().uuidString)"
     func getaddcode(login:String,completion: @escaping (Result<[Newaddrowdata.Addrowdata],NetworkError>)-> Void){
         guard  let urlString = "https://sheetdb.io/api/v1/\(addpartnerid)/search?login=\(login)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ,let url=URL(string: urlString) else {
@@ -127,8 +126,14 @@ class DataManager {
         
         }.resume()
     }
-    func readed(group:String,newrow:Sheetdbget){
-        
+    func readed(group:String,newrow:Sheetdbget,login:String){
+        var sheetid=""
+        if login=="zxc83441@gmail.com" || login=="wes741@yahoo.com.tw"{
+            sheetid="oee2k0tq8fmpf"
+        }
+        else{
+            sheetid="5tpif3zsl56dh"
+        }
         guard  let urlString = "https://sheetdb.io/api/v1/\(sheetid)/group/\(group)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ,let url=URL(string: urlString) else {
             return         }
         var request = URLRequest(url: url)
@@ -148,7 +153,15 @@ class DataManager {
 
 
     
-    func getSheetdbPublisher(sql:String)->AnyPublisher<[Sheetdbget],Error>{
+    func getSheetdbPublisher(sql:String,login:String)->AnyPublisher<[Sheetdbget],Error>{
+        var sheetid=""
+        if login=="zxc83441@gmail.com" || login=="wes741@yahoo.com.tw"{
+            sheetid="oee2k0tq8fmpf"
+        }
+        else{
+            sheetid="5tpif3zsl56dh"
+        }
+
         guard  let urlString = "https://sheetdb.io/api/v1/\(sheetid)\(sql)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ,let url=URL(string: urlString) else {
             return Fail(error: NetworkError.invalidUrl).eraseToAnyPublisher()
         }
@@ -261,7 +274,7 @@ class DataManager {
         let parameters = [
             [
                 "key": "album",
-                "value": "Dr9328E",//B52Qztm
+                "value": "B52Qztm",//Dr9328E
             ],
             [
                 "key": "image",
@@ -280,6 +293,26 @@ class DataManager {
 
         return URLSession.shared.dataTaskPublisher(for: request).map{$0.data}.decode(type: UploadImageResult.self, decoder: decorder).receive(on: DispatchQueue.main).eraseToAnyPublisher()
     }
+    func upImagePublisher(uiImage: UIImage)->AnyPublisher<UploadImageResult,Error> {
+        let parameters = [
+            [
+                "key": "image",
+                "value": uiImage,
+            ]
+            ]
+        
+        let postData = createMultipartFormData(parameters: parameters)
+        let url = URL(string: "https://api.imgur.com/3/image")!
+            var request = URLRequest(url: url)
+            request.setValue("Bearer 286d9bf31d2200c23914c19f9d6d0aab0e2e925c", forHTTPHeaderField: "Authorization")
+            request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+            request.httpMethod = "POST"
+            let decorder=JSONDecoder()
+            request.httpBody=postData
+
+        return URLSession.shared.dataTaskPublisher(for: request).map{$0.data}.decode(type: UploadImageResult.self, decoder: decorder).receive(on: DispatchQueue.main).eraseToAnyPublisher()
+    }
+
     func upImage(uiImage: UIImage, completion: @escaping (Result<String,NetworkError>) -> Void) {
         let parameters = [
             [
@@ -312,7 +345,15 @@ class DataManager {
             
     }
     
-    func postSheetdbPublisher(newrow:Sheetdbget)->AnyPublisher<Int,Error>{
+    func postSheetdbPublisher(newrow:Sheetdbget,login:String)->AnyPublisher<Int,Error>{
+        var sheetid=""
+        if login=="zxc83441@gmail.com" || login=="wes741@yahoo.com.tw"{
+            sheetid="oee2k0tq8fmpf"
+        }
+        else{
+            sheetid="5tpif3zsl56dh"
+        }
+
         guard  let urlString = "https://sheetdb.io/api/v1/\(sheetid)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ,let url=URL(string: urlString) else {
             return Fail(error: NetworkError.invalidUrl).eraseToAnyPublisher()
         }

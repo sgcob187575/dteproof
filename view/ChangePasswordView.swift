@@ -15,7 +15,6 @@ struct ChangePasswordView: View {
     @State private var newpass=""
     @State private var confirmpass=""
     @Binding var showChangePassword:Bool
-    @Binding var barcolor:UIColor
     @State private var alertmessage="請稍後"
     @State private var alerttitle="儲存中"
     @State private var saving=false
@@ -41,13 +40,22 @@ struct ChangePasswordView: View {
             }
             
             
-        }
+        }.alert(isPresented: $showAlert) { () -> Alert in
+            return Alert(title: Text(self.alerttitle),message: Text(self.alertmessage), dismissButton: .default(Text("ok"), action: {
+                if self.changesuccess{
+                    self.showChangePassword=false
+                }
+                else{
+                    self.saving=false
+                }
+            }))
+        }.frame(height:UIScreen.main.bounds.height).navigationBarTitle("變更密碼", displayMode: .inline).navigationBarItems(trailing: savebutton(showAlert: self.$showAlert, originpass: self.$originpass, newpass: self.$newpass, confirmpass: self.$confirmpass, showChangePassword: self.$showChangePassword, alertmessage: self.$alertmessage, alerttitle: self.$alerttitle, saving: self.$saving, changesuccess: self.$changesuccess))
     }
 }
 
 struct ChangePasswordView_Previews: PreviewProvider {
     static var previews: some View {
-        ChangePasswordView(showChangePassword: .constant(true), barcolor: .constant(.gray))    }
+        ChangePasswordView(showChangePassword: .constant(true))    }
 }
 struct savebutton: View {
     @Binding var showAlert:Bool
@@ -55,7 +63,6 @@ struct savebutton: View {
     @Binding var newpass:String
     @Binding var confirmpass:String
     @Binding var showChangePassword:Bool
-    @Binding var barcolor:UIColor
     @Binding var alertmessage:String
     @Binding var alerttitle:String
     @Binding var saving:Bool
@@ -66,7 +73,6 @@ struct savebutton: View {
         Button(action: {
             self.showAlert=true
             self.saving=true
-            self.barcolor=UIColor.black
             self.alerttitle="儲存中"
             self.alertmessage="請稍候"
             guard Validfield.shared.validatePassword(password: self.newpass) else{
@@ -109,16 +115,7 @@ struct savebutton: View {
         }){
             Text("完成").bold().foregroundColor(Color(.label))
         }
-        .alert(isPresented: $showAlert) { () -> Alert in
-            return Alert(title: Text(self.alerttitle),message: Text(self.alertmessage), dismissButton: .default(Text("ok"), action: {
-                if self.changesuccess{
-                    self.showChangePassword=false
-                }
-                else{
-                    self.saving=false
-                }
-            }))
-        }
+        
     }
 }
 

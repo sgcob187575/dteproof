@@ -12,7 +12,8 @@ import Combine
 import MapKit
 
 struct UploadfileView: View {
-    @Binding var selecttab:Int
+    @Binding  var showupload:Bool
+
     @State private var showSelectPhoto=true
     @EnvironmentObject var viewRouter: ViewRouter
     @State private var test = false
@@ -29,7 +30,6 @@ struct UploadfileView: View {
     @State var searchoffset:CGFloat=0
     @ObservedObject var locationManager = LocationManager.shared
     var body: some View {
-        NavigationView{
             ZStack(alignment: .bottom){
                 VStack {
                     HStack {
@@ -97,8 +97,7 @@ struct UploadfileView: View {
                 self.uploadimage.showError
             }, set: { (_) in
                 if  self.uploadimage.errortext=="上傳成功" || self.uploadimage.errortext=="上傳失敗"{
-                    self.selecttab=1
-
+                    self.showupload=false
                 }
                 self.uploadimage.selectimages.removeAll()
                 self.uploadimage.selectvedio.removeAll()
@@ -109,15 +108,7 @@ struct UploadfileView: View {
                 self.uploadimage.showError.toggle()
             })){
                 Alert(title: Text(self.uploadimage.errortext))
-            }.navigationBarItems( leading: HStack{
-                Image(systemName: "lessthan").resizable().foregroundColor(.primary).frame(width:20,height: 25).padding().onTapGesture {
-                    self.selecttab=1
-                }
-                Spacer()
-                Text("新貼文").frame(width:150).foregroundColor(.primary)
-                Spacer()
-                
-                Button(action: {
+            }.navigationBarTitle("新貼文", displayMode: .inline).navigationBarItems( trailing: Button(action: {
                     guard self.uploadimage.selectimages.count>0 else{
                         self.uploadimage.errortext="請選擇照片"
                         self.uploadimage.showError.toggle()
@@ -127,24 +118,14 @@ struct UploadfileView: View {
                     if self.locationname != "未選取"{
                         templocation=self.locationname
                     }
-                    self.uploadimage.upload(newrow: Sheetdbget(imageURL: [String](), text: self.imagetext, group: UUID().uuidString, read: "false", date: self.imagedate.date2String(dateFormat: "yyyy-MM-dd"), upload: self.userdata.user.profile!.displayName,uploadimage: self.userdata.user.profile!.imageURL!, uploadlogin: self.userdata.user.profile!.login,locationname: templocation))
+                self.uploadimage.upload(newrow: Sheetdbget(imageURL: [String](), text: self.imagetext, group: UUID().uuidString, read: "false", date: self.imagedate.date2String(dateFormat: "yyyy-MM-dd"), upload: self.userdata.user.profile!.displayName,uploadimage: self.userdata.user.profile!.imageURL!, uploadlogin: self.userdata.user.profile!.login,locationname: templocation),login: self.userdata.user.profile!.login)
                     print(self.userdata.user.profile!.imageURL!)
                 
                    
                     
 
                     
-                }){                Text("上傳").foregroundColor(.primary).frame(width:60)
-                }
-            }.frame(width:UIScreen.main.bounds.width,height: 60).background(Rectangle()
-                .frame(height: 1.0, alignment: .bottom)
-                .foregroundColor(Color.gray).offset(y:30))
-            )
-        } .background(NavigationConfigurator { nc in
-            nc.navigationBar.barTintColor = self.barcolor
-            nc.navigationBar.tintColor=UIColor.label
-            nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.label]
-        })           .navigationViewStyle(StackNavigationViewStyle())
+                }){                Text("上傳").foregroundColor(.primary)                }            )
         
     }
 
@@ -159,7 +140,7 @@ struct UploadfileView: View {
 }
 struct UploadfileView_Previews: PreviewProvider {
     static var previews: some View {
-        UploadfileView(selecttab: .constant(2))
+        UploadfileView(showupload: .constant(true))
     }
 }
 extension String{

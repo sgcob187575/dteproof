@@ -14,6 +14,8 @@ struct MenuView: View {
     @Binding var showMenu:Bool
     @Binding var showcountdown:Bool
     @Binding var showSearch:Bool
+    @Binding var showupload:Bool
+
 
     var body: some View {
         ZStack{
@@ -23,6 +25,8 @@ struct MenuView: View {
             listbutton(showMenu: self.$showMenu, showSet: self.$showChangePassword, text: "變更密碼", imagename: "lock")
             listbutton(showMenu: self.$showMenu, showSet: self.$showcountdown, text: "倒數日", imagename: "calendar.circle")
             listbutton(showMenu: self.$showMenu, showSet: self.$showSearch, text: "搜尋", imagename: "magnifyingglass")
+            listbutton(showMenu: self.$showMenu, showSet: self.$showupload, text: "上傳", imagename: "square.and.arrow.up")
+
         }
         }.background(Color.gray)
     }
@@ -30,7 +34,7 @@ struct MenuView: View {
 
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
-        MenuView(showSetProfile: .constant(false), showChangePassword: .constant(false), showMenu: .constant(true),showcountdown: .constant(false),showSearch: .constant(false))
+        MenuView(showSetProfile: .constant(false), showChangePassword: .constant(false), showMenu: .constant(true),showcountdown: .constant(false),showSearch: .constant(false),showupload: .constant(false))
     }
 }
 
@@ -51,7 +55,7 @@ struct listbutton: View {
                 Image(systemName: imagename).resizable().scaledToFit().frame(height:40)
                 Text(text).fixedSize()
             }.frame(minWidth: 0, maxWidth: .infinity)
-                .padding()
+                .padding(.init(top: 10, leading: 0, bottom: 10, trailing: 0))
             .foregroundColor(.white)                }.listRowBackground(Color.gray).background(Rectangle()
             .frame(width:300,height: 1.0, alignment: .bottomTrailing)
             .foregroundColor(Color.white).offset(y:30))

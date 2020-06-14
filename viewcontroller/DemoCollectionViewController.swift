@@ -42,6 +42,12 @@ class DemoCollectionViewController: UICollectionViewController{
     }
     override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if currentPage == indexPath.row {
+            guard  collectionView.visibleCells.first != nil else {
+                return
+            }
+            guard collectionView.indexPath(for: collectionView.visibleCells.first!) != nil else {
+                return
+            }
             currentPage = collectionView.indexPath(for: collectionView.visibleCells.first!)!.row
         }
         self.delegate?.returnindex(self, currentPage)

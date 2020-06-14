@@ -72,7 +72,7 @@ struct PostViewRow: View {
                     }
                 }.onAppear(){
                     if self.userdata.user.profile!.login != self.postdata.uploadlogin && self.postdata.read != "TRUE"{
-                    DataManager.shared.readed(group: self.postdata.group, newrow: self.postdata)
+                        DataManager.shared.readed(group: self.postdata.group, newrow: self.postdata,login: self.userdata.user.profile!.login)
                     }
                 }
                 Text(postdata.read=="FALSE" ?  postdata.text : postdata.text+"\n❤️").foregroundColor(.black).padding(.init(top: 25, leading: 50, bottom: 25, trailing: 50)).background(ZStack{

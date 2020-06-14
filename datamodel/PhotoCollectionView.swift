@@ -63,7 +63,7 @@ struct WallCollectionView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> WallCollectionViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let demo = storyboard.instantiateViewController(identifier: "WallCollectionViewController") as? WallCollectionViewController
-        wallViewModel.fetchdata(sql: "/search?uploadlogin=\(login)")
+        wallViewModel.fetchdata(sql: "/search?uploadlogin=\(login)",login: login)
         return demo!
 
         

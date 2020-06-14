@@ -17,26 +17,35 @@ class UploadImage:ObservableObject{
     @Published var errortext="上傳成功"
     @Published var publishercount=0
     @Published var selectvedio=[AVAsset]()
-
+    
     public var imagepublishers=[AnyPublisher<UploadImageResult, Error>]()
     public var videopublishers=[AnyPublisher<UploadVideoResult, Error>]()
-
+    
     var imagecancellable:AnyCancellable?
     var videocancellable:AnyCancellable?
     var sheetcancellable:AnyCancellable?
-
-    func upload(newrow:Sheetdbget){
+    
+    func upload(newrow:Sheetdbget,login:String){
         self.errortext="上傳中請稍候"
         self.showError=true
-        for index in selectimages.indices{
-            imagepublishers.append( DataManager.shared.upImagetoalbumPublisher(uiImage: selectimages[index]))
+        if login=="zxc83441@gmail.com" || login=="wes741@yahoo.com.tw"{
+            for index in selectimages.indices{
+                imagepublishers.append( DataManager.shared.upImagetoalbumPublisher(uiImage: selectimages[index]))
+            }
+            
+        }
+        else{
+            for index in selectimages.indices{
+                imagepublishers.append( DataManager.shared.upImagePublisher(uiImage: selectimages[index]))
+            }
+            
         }
         for index in selectvedio.indices{
             imagepublishers.append( DataManager.shared.upVideotoalbumPublisher(avasset:selectvedio[index]))
         }
-
+        
         let upstream=Publishers.MergeMany(imagepublishers).collect()
-
+        
         imagecancellable=upstream.sink(receiveCompletion: { (result) in
             switch result{
                 
@@ -44,7 +53,7 @@ class UploadImage:ObservableObject{
                 print("imageOK")
                 self.showError=true
                 self.errortext="快好了再一下下"
-
+                
             case .failure(_):
                 self.showError=true
                 self.errortext="上傳失敗晚點再傳"
@@ -56,14 +65,14 @@ class UploadImage:ObservableObject{
                 
             }
             let uprow=Sheetdbget(imageURL: self.imagesURL, text: newrow.text, group: newrow.group, read: newrow.read, date: newrow.date, upload: newrow.upload,uploadimage: newrow.uploadimage, uploadlogin: newrow.uploadlogin,locationname: newrow.locationname)
-            self.uploadsheet(row: uprow)
+            self.uploadsheet(row: uprow,login: login)
             
         }
-                
+        
     }
-    func uploadsheet(row:Sheetdbget)
+    func uploadsheet(row:Sheetdbget,login:String)
     {
-        sheetcancellable =                DataManager.shared.postSheetdbPublisher(newrow: row).sink(receiveCompletion: { (result) in
+        sheetcancellable =                DataManager.shared.postSheetdbPublisher(newrow: row,login: login).sink(receiveCompletion: { (result) in
             switch result{
                 
             case .finished:
@@ -76,7 +85,7 @@ class UploadImage:ObservableObject{
             }
         }, receiveValue: { (count) in
             print("success:",count)
-            })
+        })
     }
-
+    
 }

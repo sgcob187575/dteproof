@@ -16,8 +16,8 @@ struct HomeView: View {
     @State private var showSetProfile = false
     @State private var showChangepass = false
     @State private var showCountdown = false
+    @State private var showupload = false
     @State private var showSearch = false
-    @State private var test = false
     @State private var barcolor=UIColor.systemBackground
     @State private var selectImage: UIImage?
     @EnvironmentObject var userdata:Userdata
@@ -26,75 +26,79 @@ struct HomeView: View {
     @ObservedObject var locationManager = LocationManager.shared
     @State private var searchoffset:CGFloat=0
     @State private var canRefresh=true
-    
+    @State private var timer:Timer?
     var body: some View {
         NavigationView{
             ZStack(alignment: .bottom){
-                NavigationLink(destination: SetProfileView(showSetprofile: self.$showSetProfile,barcolor:self.$barcolor).environmentObject(self.userdata), isActive: self.$showSetProfile){
+                NavigationLink(destination: SetProfileView(showSetprofile: self.$showSetProfile,barcolor:self.$barcolor), isActive: self.$showSetProfile){
                     Text("")
                 }
-                NavigationLink(destination: ChangePasswordView(showChangePassword: self.$showChangepass,barcolor:self.$barcolor).environmentObject(self.userdata), isActive: self.$showChangepass){
+                NavigationLink(destination: UploadfileView(showupload: self.$showupload), isActive: self.$showupload){
+                    Text("")
+                }
+                
+                NavigationLink(destination: ChangePasswordView(showChangePassword: self.$showChangepass) ,isActive: self.$showChangepass){
                     Text("")
                 }
                 NavigationLink(destination: CountDownView(), isActive: self.$showCountdown){
                     Text("")
                 }
-                Text("Loading").offset(y:-UIScreen.main.bounds.height+60)
-                VStack {
-                    
-                    List{
-                        GeometryReader  { (g:GeometryProxy) -> Text in
-                            let frame=g.frame(in: CoordinateSpace.global)
-                            let sql="/search_or?uploadlogin[]=\(self.userdata.user.profile!.login)&uploadlogin[]=\(self.userdata.user.profile!.partner ?? "")"
-                            
-                                if frame.origin.y>150{
-                                    DispatchQueue.main.async {
-                                        self.loading="Loading"
-
-                                    }
-
-                                    if self.canRefresh{
-
-                                    print("fetchagain")
-                                    
-                                    DispatchQueue.main.async {
-                                        self.canRefresh=false
-                                        self.sheetdbViewModel.cancellable=nil
-                                        self.sheetdbViewModel.fetchdata(sql:sql)
-                                        
-                                    }
-                                    
-                                }
-                                return Text(self.loading)
+                List{
+                    GeometryReader  { (g:GeometryProxy) -> Text in
+                        let frame=g.frame(in: CoordinateSpace.global)
+                        let sql="/search_or?uploadlogin[]=\(self.userdata.user.profile!.login)&uploadlogin[]=\(self.userdata.user.profile!.partner ?? "")"
+                        
+                        if frame.origin.y>150{
+                            DispatchQueue.main.async {
+                                self.loading="Loading"
                                 
                             }
-                            else{
+                            
+                            if self.canRefresh{
+                                
+                                print("fetchagain")
+                                
                                 DispatchQueue.main.async {
-                                    self.loading=""
-
+                                    self.canRefresh=false
+                                    self.timer=Timer.scheduledTimer(withTimeInterval: 5, repeats: false, block: { (timer) in
+                                        self.canRefresh=true
+                                    })
+                                    self.sheetdbViewModel.cancellable=nil
+                                    self.sheetdbViewModel.fetchdata(sql:sql,login: self.userdata.user.profile!.login)
+                                    
                                 }
-                                return Text(self.loading)
+                                
                             }
-                        }.frame(height: self.loading=="" ? 0 : 30).offset(y:self.loading=="" ? 0:-50)
-                        
-                        ForEach(sheetdbViewModel.appeardata.sorted(by: { return $0.date>$1.date                        }),id:\.id){ (data) in
-                            PostViewRow(postdata:data,searchoffset: self.$searchoffset).offset(x:-15)
+                            return Text(self.loading)
                             
-                            
-                        }.listRowBackground(Color.init(red: 202/255, green: 230/255, blue: 242/255)).onAppear {
-                            self.locationManager.getLocation()
-                            UITableView.appearance().separatorStyle = .none } .onDisappear { UITableView.appearance().separatorStyle = .singleLine }
+                        }
+                        else{
+                            DispatchQueue.main.async {
+                                self.loading=""
+                                
+                            }
+                            return Text(self.loading)
+                        }
+                    }.frame(height: self.loading=="" ? 0 : 30).offset(y:self.loading=="" ? 0:-50)
+                    
+                    ForEach(sheetdbViewModel.appeardata.sorted(by: { return $0.date>$1.date                        }),id:\.id){ (data) in
+                        PostViewRow(postdata:data,searchoffset: self.$searchoffset).offset(x:-15)
                         
                         
-                    }
-                }.offset(y:-70).onAppear {
-                    print("fetch data")
-                    let sql="/search_or?uploadlogin[]=\(self.userdata.user.profile!.login)&uploadlogin[]=\(self.userdata.user.profile!.partner ?? "")"
-                    self.sheetdbViewModel.fetchdata(sql:sql)
+                    }.listRowBackground(Color.init(red: 202/255, green: 230/255, blue: 242/255))
+                    
+                    
+                }.frame(height:UIScreen.main.bounds.height)
+                    .onAppear {
+                        UITableView.appearance().separatorStyle = .none
+                        print("fetch data")
+                        let sql="/search_or?uploadlogin[]=\(self.userdata.user.profile!.login)&uploadlogin[]=\(self.userdata.user.profile!.partner ?? "")"
+                        self.sheetdbViewModel.fetchdata(sql:sql,login: self.userdata.user.profile!.login)
+                        self.locationManager.getLocation()
                 }
                 if(showMenu){
                     MenuView(showSetProfile: self.$showSetProfile,showChangePassword:
-                        self.$showChangepass,showMenu: self.$showMenu, showcountdown: self.$showCountdown,showSearch: self.$showSearch).offset(x:0,y:0)
+                        self.$showChangepass,showMenu: self.$showMenu, showcountdown: self.$showCountdown,showSearch: self.$showSearch,showupload: self.$showupload).offset(x:0,y:-60)
                 }
                 if(showSearch){
                     searchBarView(sheetdbViewModel: sheetdbViewModel,showSearch: $showSearch,searchoffset: $searchoffset)
@@ -156,29 +160,27 @@ struct searchBarView:View {
     
     var body: some View{
         ZStack {
-            Color.white.frame(height:250)
-            VStack {
+            Color("back").frame(height:UIScreen.main.bounds.height/3)
+            VStack(spacing:5) {
                 Picker(selection: $mode, label: Text("")) {
                     ForEach(0..<types.count) { (index) in
                         Text(self.types[index])
                     }
-                }.colorMultiply( .gray).pickerStyle(SegmentedPickerStyle()).padding()
+                }.pickerStyle(SegmentedPickerStyle()).padding(.init(top: 20, leading: 5, bottom: 0, trailing: 5))
                 if mode == 1{
-                    HStack {
-                        DatePicker("", selection: Binding(get: {self.date}, set: {
-                            self.date=$0
-                            if self.date.date2String(dateFormat: "yyyy-MM") == Date().date2String(dateFormat: "yyyy-MM"){
-                                self.sheetdbViewModel.cancelsearch()
-                            }
-                            else{
+                    DatePicker("", selection: Binding(get: {self.date}, set: {
+                        self.date=$0
+                        if self.date.date2String(dateFormat: "yyyy-MM") == Date().date2String(dateFormat: "yyyy-MM"){
+                            self.sheetdbViewModel.cancelsearch()
+                        }
+                        else{
                             self.sheetdbViewModel.searchdatawithdate(self.date)
-                            }
-                        }), in: ClosedRange<Date>(uncheckedBounds: (lower: DateComponents(calendar: Calendar.current, year: 2014, month: 10, day: 31 ).date!, upper: Date())),displayedComponents: .date).colorMultiply( .black)
-                            .labelsHidden()
-                            .frame( height: 150.0)
-                        
-                        
-                    }
+                        }
+                    }), in: ClosedRange<Date>(uncheckedBounds: (lower: DateComponents(calendar: Calendar.current, year: 2014, month: 10, day: 31 ).date!, upper: Date())),displayedComponents: .date)
+                        .labelsHidden()
+                        .frame(height:UIScreen.main.bounds.height/7).clipped()
+                    
+                    
                     
                 }
                 if mode == 0{
@@ -193,9 +195,9 @@ struct searchBarView:View {
                             }
                     }),searchoffset:$searchoffset).offset(y:searchoffset)
                 }
-                
-            }
-            Image(systemName: "xmark.circle.fill").font(.system(size: 30)).foregroundColor(.black).onTapGesture {
+                Spacer()
+            }.frame(height:UIScreen.main.bounds.height/3)
+            Image(systemName: "xmark.circle.fill").font(.system(size: 30)).onTapGesture {
                 self.showSearch=false
                 self.searchoffset=0
                 

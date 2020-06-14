@@ -16,17 +16,21 @@ struct MotherView: View {
     var body: some View {
         ZStack {
             if viewRouter.currentPage=="start"{
-                StartView().environmentObject(viewRouter)
+                StartView()
             }
             else if viewRouter.currentPage=="logged"{
-                ContentView().environmentObject(userdata).environmentObject(viewRouter).environment(\.managedObjectContext, managedObjectContext)
-            } else if viewRouter.currentPage=="unlogged"{
-                LoginView().environmentObject(userdata).environmentObject(viewRouter)
+                HomeView().environmentObject(userdata)
+                
+            }
+
+            else if viewRouter.currentPage=="unlogged"{
+                LoginView().environmentObject(userdata)
                 
             }else if viewRouter.currentPage=="register"{
-                RegisterView().environmentObject(userdata).environmentObject(viewRouter)
+                RegisterView().environmentObject(userdata)
+                
             }else if viewRouter.currentPage=="forgot"{
-                Forgotpasswordview().environmentObject(userdata).environmentObject(viewRouter)
+                Forgotpasswordview().environmentObject(userdata)
             }
         }.onAppear{
             if self.userdata.user.profile==nil{

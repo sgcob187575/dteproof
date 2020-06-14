@@ -32,7 +32,6 @@
 		12420058245E5F5E00FEA28E /* SentyGoldenBell.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 12420050245E5F5E00FEA28E /* SentyGoldenBell.ttf */; };
 		12420059245E5F5E00FEA28E /* LinearGradientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12420051245E5F5E00FEA28E /* LinearGradientExtension.swift */; };
 		1242005A245E5F5E00FEA28E /* DataStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12420052245E5F5E00FEA28E /* DataStructure.swift */; };
-		1242008B245E603D00FEA28E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1242007C245E603D00FEA28E /* ContentView.swift */; };
 		1242008C245E603D00FEA28E /* MotherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1242007D245E603D00FEA28E /* MotherView.swift */; };
 		1242008D245E603D00FEA28E /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1242007E245E603D00FEA28E /* RegisterView.swift */; };
 		1242008E245E603D00FEA28E /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1242007F245E603D00FEA28E /* StartView.swift */; };
@@ -120,7 +119,6 @@
 		12420050245E5F5E00FEA28E /* SentyGoldenBell.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SentyGoldenBell.ttf; sourceTree = "<group>"; };
 		12420051245E5F5E00FEA28E /* LinearGradientExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinearGradientExtension.swift; sourceTree = "<group>"; };
 		12420052245E5F5E00FEA28E /* DataStructure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStructure.swift; sourceTree = "<group>"; };
-		1242007C245E603D00FEA28E /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = view/ContentView.swift; sourceTree = SOURCE_ROOT; };
 		1242007D245E603D00FEA28E /* MotherView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MotherView.swift; path = view/MotherView.swift; sourceTree = SOURCE_ROOT; };
 		1242007E245E603D00FEA28E /* RegisterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegisterView.swift; path = view/RegisterView.swift; sourceTree = SOURCE_ROOT; };
 		1242007F245E603D00FEA28E /* StartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StartView.swift; path = view/StartView.swift; sourceTree = SOURCE_ROOT; };
@@ -257,7 +255,6 @@
 				1242007D245E603D00FEA28E /* MotherView.swift */,
 				1242007E245E603D00FEA28E /* RegisterView.swift */,
 				12420089245E603D00FEA28E /* SetProfileView.swift */,
-				1242007C245E603D00FEA28E /* ContentView.swift */,
 				12420086245E603D00FEA28E /* UploadfileView.swift */,
 				1242007F245E603D00FEA28E /* StartView.swift */,
 			);
@@ -648,7 +645,6 @@
 				122449FC2475253D002FB2D7 /* PhotoCollectionView.swift in Sources */,
 				12AE6BD72490B75400349207 /* AddPartnerView.swift in Sources */,
 				1242008C245E603D00FEA28E /* MotherView.swift in Sources */,
-				1242008B245E603D00FEA28E /* ContentView.swift in Sources */,
 				12420057245E5F5E00FEA28E /* Multitextfield.swift in Sources */,
 				1259555A248783C30095251B /* SearchBar.swift in Sources */,
 				12244A3A2477690D002FB2D7 /* WallCollectionViewController.swift in Sources */,
@@ -833,7 +829,7 @@
 				DEVELOPMENT_TEAM = NTXR9F489V;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = dteproof/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -855,7 +851,7 @@
 				DEVELOPMENT_TEAM = NTXR9F489V;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = dteproof/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

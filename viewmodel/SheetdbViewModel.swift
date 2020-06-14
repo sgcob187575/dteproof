@@ -12,11 +12,11 @@ class SheetdbViewModel: ObservableObject {
     @Published var data = [Sheetdbget]()
     @Published var appeardata = [Sheetdbget]()
     var cancellable: AnyCancellable?
-    func fetchdata(sql:String) {
+    func fetchdata(sql:String,login:String) {
         
        
         
-        cancellable = DataManager.shared.getSheetdbPublisher(sql:sql).sink(receiveCompletion: { (completion) in
+        cancellable = DataManager.shared.getSheetdbPublisher(sql:sql,login: login).sink(receiveCompletion: { (completion) in
                 if case .failure = completion {
                     print("errorfetch")
                 }
@@ -49,11 +49,11 @@ class SheetdbwallViewModel: ObservableObject {
     @Published var data = [Sheetdbget]()
     var cancellable: AnyCancellable?
     
-    func fetchdata(sql:String) {
+    func fetchdata(sql:String,login:String) {
         
        
         
-        cancellable = DataManager.shared.getSheetdbPublisher(sql:sql).sink(receiveCompletion: { (completion) in
+        cancellable = DataManager.shared.getSheetdbPublisher(sql:sql,login: login).sink(receiveCompletion: { (completion) in
                 if case .failure = completion {
                     print("errorfetch")
                 }

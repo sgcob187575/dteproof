@@ -13,7 +13,7 @@ import Photos
 import BSImagePicker
 import MapKit
 
-let startword=["s","a"]
+let startword=["Demo","期末"]
 
 class ViewRouter: ObservableObject {
     
